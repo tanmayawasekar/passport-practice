@@ -3,6 +3,7 @@ from fabric.contrib.files import append, exists
 from fabric.api import cd, env, local, run, settings
 import re
 
+BRANCH_NAME = "circleci-project-setup"
 REPO_URL = 'https://github.com/tanmayawasekar/passport-practice.git'  
 
 def deploy():
@@ -48,7 +49,9 @@ def _build_docker_image():
 
 def _get_latest_source():
     if exists('.git'):  
-        run('git pull origin master')  
+        run('git fetch origin {}'.format(BRANCH_NAME))  
+        run('git checkout {}'.format(BRANCH_NAME))  
+        run('git pull origin {}'.format(BRANCH_NAME))  
     else:
         run(f'git clone {REPO_URL} .')  
     
