@@ -72,9 +72,7 @@ def _install_docker():
             #     $(lsb_release -cs) \
             #     stable"')
             run('sudo add-apt-repository \
-                "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-                bionic \
-                stable"')
+                "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
             run('echo installing docker and all-->')
             run('sudo apt-get install docker-ce docker-ce-cli containerd.io')
             run('sudo docker --version')
