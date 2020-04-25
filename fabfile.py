@@ -67,9 +67,13 @@ def _install_docker():
               software-properties-common -y')
             run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
             run('sudo apt-key fingerprint 0EBFCD88')
+            # run('sudo add-apt-repository \
+            #     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+            #     $(lsb_release -cs) \
+            #     stable"')
             run('sudo add-apt-repository \
                 "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-                $(lsb_release -cs) \
+                bionic \
                 stable"')
             run('echo installing docker and all-->')
             run('sudo apt-get install docker-ce docker-ce-cli containerd.io')
