@@ -54,10 +54,25 @@ def _install_docker():
     with settings(warn_only=True):
         output = run("docker --version")
         if output.failed:
+            # run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
+            # run('sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"')
+            # run('sudo apt-get update')
+            # run('sudo apt-get install -y docker-ce')
+            run('sudo apt-get install \
+              apt-transport-https \
+              ca-certificates \
+              curl \
+              gnupg-agent \
+              software-properties-common')
             run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
-            run('sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"')
+            run('sudo apt-key fingerprint 0EBFCD88')
+            run('sudo add-apt-repository \
+                "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+                $(lsb_release -cs) \
+                stable"')
             run('sudo apt-get update')
-            run('sudo apt-get install -y docker-ce')
+            run('sudo apt-get install docker-ce docker-ce-cli containerd.io')
+
 
 def is_package_installed(pkgname):
     output = local('dpkg -s {}'.format(pkgname), capture=True)
