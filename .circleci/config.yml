@@ -44,7 +44,7 @@ jobs:
             EC2_PUBLIC_DNS=52.45.240.10
             ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS \
             echo "asd5"
-            node app.js
+            npm run start
             # other commands
             # TODO Perform steps to deploy
             # .
