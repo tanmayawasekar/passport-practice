@@ -28,7 +28,7 @@ jobs:
             # 3- Get AWS Region# TODO Don't forget to replcae by your own Region
             AWS_REGION=us-east-1
             # 4- Get SG ID# TODO Don't forget to replace by your own SG ID
-            SG_ID=sg-sg-cda6fc91
+            SG_ID=sg-cda6fc91
             # 5- Add an ingress rule to the security group
             # echo $AWS_ACCESS_KEY_ID
             # echo $AWS_SECRET_ACCESS_KEY
