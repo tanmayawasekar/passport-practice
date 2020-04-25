@@ -54,28 +54,28 @@ def _install_docker():
     with settings(warn_only=True):
         output = run("docker --version")
         if output.failed:
-            # run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
-            # run('sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"')
-            # run('sudo apt-get update')
-            # run('sudo apt-get install -y docker-ce')
-            run('echo dependecies-->')
-            run('sudo apt-get install \
-              apt-transport-https \
-              ca-certificates \
-              curl \
-              gnupg-agent \
-              software-properties-common -y')
             run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
-            run('sudo apt-key fingerprint 0EBFCD88')
-            # run('sudo add-apt-repository \
-            #     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-            #     $(lsb_release -cs) \
-            #     stable"')
-            run('sudo add-apt-repository \
-                "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
+            run('sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
             run('sudo apt-get update')
-            run('echo installing docker and all-->')
-            run('sudo apt-get install docker-ce docker-ce-cli containerd.io')
+            run('sudo apt-get install -y docker-ce')
+            # run('echo dependecies-->')
+            # run('sudo apt-get install \
+            #   apt-transport-https \
+            #   ca-certificates \
+            #   curl \
+            #   gnupg-agent \
+            #   software-properties-common -y')
+            # run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
+            # run('sudo apt-key fingerprint 0EBFCD88')
+            # # run('sudo add-apt-repository \
+            # #     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+            # #     $(lsb_release -cs) \
+            # #     stable"')
+            # run('sudo add-apt-repository \
+            #     "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
+            # run('sudo apt-get update -y')
+            # run('echo installing docker and all-->')
+            # run('sudo apt-get install docker-ce docker-ce-cli containerd.io')
             run('sudo docker --version')
 
 
