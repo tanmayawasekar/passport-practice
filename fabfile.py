@@ -70,7 +70,7 @@ def _install_docker():
                 "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
                 $(lsb_release -cs) \
                 stable"')
-            run('sudo apt-get update')
+            run('sudo apt-get update -y')
             run('sudo apt-get install docker-ce docker-ce-cli containerd.io')
 
 
