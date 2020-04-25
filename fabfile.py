@@ -58,12 +58,13 @@ def _install_docker():
             # run('sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"')
             # run('sudo apt-get update')
             # run('sudo apt-get install -y docker-ce')
+            run('echo dependecies-->')
             run('sudo apt-get install \
               apt-transport-https \
               ca-certificates \
               curl \
               gnupg-agent \
-              software-properties-common')
+              software-properties-common -y')
             run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
             run('sudo apt-key fingerprint 0EBFCD88')
             run('sudo add-apt-repository \
