@@ -17,6 +17,8 @@ def deploy():
         _build_docker_image()
 
 def _docker_compose_up():
+    run("pwd")
+    run("ls -a")
     run("docker-compose up -d")
 
 def _install_docker_compose():
