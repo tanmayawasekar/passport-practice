@@ -29,19 +29,19 @@ def _install_docker_compose():
 
 
 def _remove_existing_images_containers():
-    output = run("docker ps -q")
+    output = run("sudo docker ps -q")
     if output.stdout:
-        run("docker kill "+" ".join(output.stdout.split("\r\n")))
-    output = run("docker ps -a -q")
+        run("sudo docker kill "+" ".join(output.stdout.split("\r\n")))
+    output = run("sudo docker ps -a -q")
     if(output.stdout):
-        run("docker rm " + " ".join(output.stdout.split("\r\n")))
-    output = run("docker images -q")
+        run("sudo docker rm " + " ".join(output.stdout.split("\r\n")))
+    output = run("sudo docker images -q")
     if(output.stdout):
-        run("docker rmi "+" ".join(output.stdout.split("\r\n")))
+        run("sudo docker rmi "+" ".join(output.stdout.split("\r\n")))
 
 def _build_docker_image():
-    run("docker build -t tanmayawasekar/kitchen-display-ordering .")
-    run("docker run -p 80:3000 -d tanmayawasekar/kitchen-display-ordering")
+    run("sudo docker build -t tanmayawasekar/kitchen-display-ordering .")
+    run("sudo docker run -p 80:3000 -d tanmayawasekar/kitchen-display-ordering")
 
 
 def _get_latest_source():
@@ -52,7 +52,7 @@ def _get_latest_source():
     
 def _install_docker():
     with settings(warn_only=True):
-        output = run("docker --version")
+        output = run("sudo docker --version")
         if output.failed:
             run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
             run('sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
