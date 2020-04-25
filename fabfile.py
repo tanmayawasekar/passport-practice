@@ -3,7 +3,7 @@ from fabric.contrib.files import append, exists
 from fabric.api import cd, env, local, run, settings
 import re
 
-REPO_URL = 'https://github.com/tanmayawasekar/example-mongoose-setup-express.git'  
+REPO_URL = 'https://github.com/tanmayawasekar/passport-practice.git'  
 
 def deploy():
     site_folder = f'/home/ubuntu/sites/'  

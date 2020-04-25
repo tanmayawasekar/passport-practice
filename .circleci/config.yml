@@ -50,7 +50,7 @@ jobs:
             virtualenv venv
             source venv/bin/activate
             pip install -r requirements.txt
-            fab deploy $EC2_USERNAME@$EC2_PUBLIC_DNS
+            fab deploy -H $EC2_USERNAME@$EC2_PUBLIC_DNS
 
             # ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS \
             # echo "asd5"
