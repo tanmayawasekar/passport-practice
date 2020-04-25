@@ -73,6 +73,7 @@ def _install_docker():
             #     stable"')
             run('sudo add-apt-repository \
                 "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
+            run('sudo apt-get update')
             run('echo installing docker and all-->')
             run('sudo apt-get install docker-ce docker-ce-cli containerd.io')
             run('sudo docker --version')
