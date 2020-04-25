@@ -11,7 +11,7 @@ jobs:
     docker:
       - image: node:lts
     steps:
-      - checkout
+      # - checkout
       - run:
           name: Deploy
           command: |
@@ -40,9 +40,13 @@ jobs:
             EC2_USERNAME=ubuntu
             # TODO Change to your server's URL or public IP
             EC2_PUBLIC_DNS=52.45.240.10
-            ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS \
-            echo "asd5"
-            npm run start
+
+            python --version
+            pip install virtualenv
+
+            # ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS \
+            # echo "asd5"
+            # npm run start
             # other commands
             # TODO Perform steps to deploy
             # .
