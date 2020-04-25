@@ -6,7 +6,7 @@ import re
 REPO_URL = 'https://github.com/tanmayawasekar/example-mongoose-setup-express.git'  
 
 def deploy():
-    site_folder = f'/home/ubuntu/sites/ec2-13-235-70-206.ap-south-1.compute.amazonaws.com'  
+    site_folder = f'/home/ubuntu/sites/'  
     run(f'mkdir -p {site_folder}')  
     with cd(site_folder):  
         _install_docker()

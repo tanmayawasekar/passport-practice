@@ -11,7 +11,7 @@ jobs:
     docker:
       - image: node:lts
     steps:
-      # - checkout
+      - checkout
       - run:
           name: Deploy
           command: |
@@ -42,8 +42,8 @@ jobs:
             EC2_PUBLIC_DNS=52.45.240.10
 
             python --version
-            pip install virtualenv
-
+            /root/.local/lib/aws/bin/pip install fabric
+            fab deploy $EC2_USERNAME@$EC2_PUBLIC_DNS
             # ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS \
             # echo "asd5"
             # npm run start
