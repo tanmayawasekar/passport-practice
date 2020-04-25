@@ -22,11 +22,11 @@ jobs:
             echo "asd2"
             ./awscli-bundle/install -b ~/bin/aws
             echo "asd3"
-            cat ~/.aws/config
+            cat ~/bin/aws/config
             # 2- Get the public IP of the current CircleCI runner
             PUBLIC_IP=$(curl ipinfo.io/ip)
             # 3- Get AWS Region# TODO Don't forget to replcae by your own Region
-            AWS_REGION=us-east-1d
+            AWS_REGION=us-east-1
             # 4- Get SG ID# TODO Don't forget to replace by your own SG ID
             SG_ID=sg-sg-cda6fc91
             # 5- Add an ingress rule to the security group
