@@ -47,7 +47,7 @@ jobs:
             python --version
             pip install virtualenv
             virtualenv venv
-            . venv/bin/activate
+            source venv/bin/activate
             pip install fabric
             fab deploy $EC2_USERNAME@$EC2_PUBLIC_DNS
             # ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS \
