@@ -22,6 +22,7 @@ jobs:
             echo "asd2"
             ./awscli-bundle/install -b ~/bin/aws
             echo "asd3"
+            cat ~/.aws/config
             # 2- Get the public IP of the current CircleCI runner
             PUBLIC_IP=$(curl ipinfo.io/ip)
             # 3- Get AWS Region# TODO Don't forget to replcae by your own Region
