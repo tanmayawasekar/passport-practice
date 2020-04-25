@@ -30,8 +30,6 @@ jobs:
             # 4- Get SG ID# TODO Don't forget to replace by your own SG ID
             SG_ID=sg-cda6fc91
             # 5- Add an ingress rule to the security group
-            # echo $AWS_ACCESS_KEY_ID
-            # echo $AWS_SECRET_ACCESS_KEY
             ~/bin/aws ec2 authorize-security-group-ingress --region $AWS_REGION --group-id $SG_ID \
               --protocol tcp --port 22 --cidr $PUBLIC_IP/24
             echo "asd4"
