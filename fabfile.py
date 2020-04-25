@@ -77,6 +77,7 @@ def _install_docker():
                 stable"')
             run('echo installing docker and all-->')
             run('sudo apt-get install docker-ce docker-ce-cli containerd.io')
+            run('sudo docker --version')
 
 
 def is_package_installed(pkgname):
