@@ -42,7 +42,7 @@ jobs:
             EC2_PUBLIC_DNS=52.45.240.10
 
             python --version
-            python -m /root/.local/lib/aws/bin/pip install --user venv
+            /root/.local/lib/aws/bin/pip install --user venv
             python -m venv venv
             . venv/bin/activate
             pip install fabric
