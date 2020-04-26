@@ -15,7 +15,7 @@ def deploy():
         _get_latest_source()
         _remove_existing_images_containers()
         _docker_compose_up()
-        _build_docker_image()
+        # _build_docker_image()
 
 def _docker_compose_up():
     run("pwd")
