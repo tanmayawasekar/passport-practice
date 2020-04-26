@@ -51,7 +51,7 @@ function(accessToken, refreshToken, profile, done) {
   //   if (err) { return done(err); }
   //   done(null, user);
   // });
-  done(null, {id:1})
+  done(null, {id:2})
 }
 ));
 
