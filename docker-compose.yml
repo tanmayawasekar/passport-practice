@@ -9,10 +9,10 @@ services:
       - 80:80
       - 443:443
     external_links:
-      - kitchen:3000
+      - practice-project:3000
 
-  kitchen:
+  practice-project:
     build: .
-    container_name: kitchen
+    container_name: practice-project
     expose:
       - "3000"

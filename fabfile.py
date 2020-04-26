@@ -43,8 +43,8 @@ def _remove_existing_images_containers():
         run("sudo docker rmi "+" ".join(output.stdout.split("\r\n")))
 
 def _build_docker_image():
-    run("sudo docker build -t tanmayawasekar/kitchen-display-ordering .")
-    run("sudo docker run -p 80:3000 -d tanmayawasekar/kitchen-display-ordering")
+    run("sudo docker build -t tanmayawasekar/practice-project-display-ordering .")
+    run("sudo docker run -p 80:3000 -d tanmayawasekar/practice-project-display-ordering")
 
 
 def _get_latest_source(branch_name):
