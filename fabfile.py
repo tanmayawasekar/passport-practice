@@ -3,7 +3,7 @@ from fabric.contrib.files import append, exists
 from fabric.api import cd, env, local, run, settings
 import re
 
-BRANCH_NAME = "circleci-project-setup"
+BRANCH_NAME = "master"
 REPO_URL = 'https://github.com/tanmayawasekar/passport-practice.git'  
 
 def deploy():
@@ -47,24 +47,24 @@ def _build_docker_image():
     run("sudo docker run -p 80:3000 -d tanmayawasekar/kitchen-display-ordering")
 
 
-def _get_latest_source():
+def _get_latest_source(branch_name):
     if exists('.git'):  
-        run('git fetch origin {}'.format(BRANCH_NAME))  
-        run('git checkout {}'.format(BRANCH_NAME))  
-        run('git pull origin {}'.format(BRANCH_NAME))  
+        run('git fetch origin {}'.format(branch_name or BRANCH_NAME))  
+        run('git checkout {}'.format(branch_name or BRANCH_NAME))  
+        run('git pull origin {}'.format(branch_name or BRANCH_NAME))  
     else:
         run(f'git clone {REPO_URL} .')  
     
 def _install_docker():
     with settings(warn_only=True):
-        run("sudo apt-get remove docker docker-engine")
-        run("curl -sSL https://get.docker.com/ | sh")
-        run("sudo usermod -aG docker user")
         output = run("sudo docker --version")
         # run("sudo service docker restart")
         # run("sudo usermod -aG docker user")
 
         if output.failed:
+            run("sudo apt-get remove docker docker-engine")
+            run("curl -sSL https://get.docker.com/ | sh")
+            run("sudo usermod -aG docker user")
             # run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
             # run('sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
             # run('sudo apt-get update')
