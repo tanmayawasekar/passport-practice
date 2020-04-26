@@ -20,7 +20,6 @@ def deploy():
 def _docker_compose_up():
     run("pwd")
     run("ls -a")
-    run("export DOCKER_HOST=127.0.0.1:2375")
     run("docker-compose up -d")
 
 def _install_docker_compose():
@@ -58,15 +57,18 @@ def _get_latest_source():
     
 def _install_docker():
     with settings(warn_only=True):
+        run("sudo apt-get remove docker docker-engine")
+        run("curl -sSL https://get.docker.com/ | sh")
+        run("sudo usermod -aG docker user")
         output = run("sudo docker --version")
         # run("sudo service docker restart")
         # run("sudo usermod -aG docker user")
 
         if output.failed:
-            run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
-            run('sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
-            run('sudo apt-get update')
-            run('sudo apt-get install -y docker-ce')
+            # run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
+            # run('sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
+            # run('sudo apt-get update')
+            # run('sudo apt-get install -y docker-ce')
             # run('echo dependecies-->')
             # run('sudo apt-get install \
             #   apt-transport-https \
