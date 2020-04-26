@@ -20,7 +20,7 @@ def deploy():
 def _docker_compose_up():
     run("pwd")
     run("ls -a")
-    run("docker-compose up -d")
+    run("sudo docker-compose up -d")
 
 def _install_docker_compose():
     with settings(warn_only=True):
