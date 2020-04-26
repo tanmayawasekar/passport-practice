@@ -2,13 +2,12 @@ version: 2
 general:
   branches:
     only:
-      # - dev
-      # - staging
-      # - prod
-      # - circleci-project-setup
       - master
 jobs:
   build:
+    branches:
+      only:
+        - master
     docker:
       - image: nikolaik/python-nodejs:latest	
     steps:
