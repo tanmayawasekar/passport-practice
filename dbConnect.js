@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 // const dbURI = "mongodb://localhost:27017/kitch-display-ordering";
-const dbURI = "mongodb://localhost:27017/passport-app";
+const dbURI = process.env.MONGODB_CONNECTION_STRING || "mongodb://localhost:27017/passport-app";
 
 //console to check what is the dbURI refers to
 console.log("Database URL is =>>", dbURI);

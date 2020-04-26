@@ -1,0 +1,18 @@
+version: '3'
+services:
+  nginx: 
+    image: nginx:latest
+    container_name: production_nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+      - 443:443
+    external_links:
+      - practice-project:3000
+
+  practice-project:
+    build: .
+    container_name: practice-project
+    expose:
+      - "3000"

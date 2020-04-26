@@ -1,0 +1,61 @@
+version: 2
+general:
+  branches:
+    only:
+      - master
+jobs:
+  build:
+    branches:
+      only:
+        - master
+    docker:
+      - image: nikolaik/python-nodejs:latest	
+    steps:
+      - checkout
+      - run:
+          name: Deploy
+          command: |
+            # 1- Install AWS CLI
+            curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+            unzip awscli-bundle.zip
+            ./awscli-bundle/install -b ~/bin/aws
+            # ls ~/bin/aws
+            # 2- Get the public IP of the current CircleCI runner
+            PUBLIC_IP=$(curl ipinfo.io/ip)
+            # 3- Get AWS Region# TODO Don't forget to replcae by your own Region
+            AWS_REGION=us-east-1
+            # 4- Get SG ID# TODO Don't forget to replace by your own SG ID
+            SG_ID=sg-cda6fc91
+            # 5- remove ingress rule to the security group
+            ~/bin/aws ec2 revoke-security-group-ingress --region $AWS_REGION --group-id $SG_ID \
+            --protocol tcp --port 22 --cidr $PUBLIC_IP/24
+            # 5- Add an ingress rule to the security group
+            ~/bin/aws ec2 authorize-security-group-ingress --region $AWS_REGION --group-id $SG_ID \
+              --protocol tcp --port 22 --cidr $PUBLIC_IP/24
+            # 6- Give the ingress rule some time to propogate
+            sleep 5
+            # 7- SSH to the server to deploy
+            # TODO Change to your username
+            EC2_USERNAME=ubuntu
+            # TODO Change to your server's URL or public IP
+            EC2_PUBLIC_DNS=52.45.240.10
+
+            # python pip virtualenv and fab deploy
+            python --version
+            pip install virtualenv
+            virtualenv venv
+            source venv/bin/activate
+            pip install -r requirements.txt
+            fab deploy:$CIRCLE_BRANCH -H $EC2_USERNAME@$EC2_PUBLIC_DNS
+
+            # ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS \
+            # echo "asd5"
+            # npm run start
+            # other commands
+            # TODO Perform steps to deploy
+            # .
+            # .
+            # .
+            # 8- Remove the ingress rule
+            ~/bin/aws ec2 revoke-security-group-ingress --region $AWS_REGION --group-id $SG_ID \
+            --protocol tcp --port 22 --cidr $PUBLIC_IP/24

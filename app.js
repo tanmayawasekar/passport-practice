@@ -51,7 +51,7 @@ function(accessToken, refreshToken, profile, done) {
   //   if (err) { return done(err); }
   //   done(null, user);
   // });
-  done(null, {id:1})
+  done(null, {id:2})
 }
 ));
 
@@ -112,7 +112,7 @@ app.get('/auth/facebook/callback',
   passport.authenticate('facebook',{ scope : ['user_friends', 'public_profile', 'user_friends', 'manage_pages',  'email'] , successRedirect: '/',
                                       failureRedirect: '/login' }));
 
-app.post('/auth/google', passport.authenticate('google', { scope: ['openid' ,'profile' ,'email'] }));
+app.get('/auth/google', passport.authenticate('google', { scope: ['openid' ,'profile' ,'email'] }));
 
 
 app.get('/auth/google/callback', 
