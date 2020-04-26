@@ -5,10 +5,12 @@ const session = require("express-session")
 const MongoStore = require('connect-mongo')(session);
 const bodyParser = require("body-parser");
 const passport = require("passport")
+var url = require('url') ;
 const LocalStrategy = require('passport-local').Strategy
 , FacebookStrategy = require('passport-facebook').Strategy
 , GoogleStrategy = require('passport-google-oauth20').Strategy;
 
+HOST_URL = process.env.HOST_URL || "http://me.mydomain.com:3000"
 
 require("./models")
 
@@ -54,11 +56,14 @@ function(accessToken, refreshToken, profile, done) {
   done(null, {id:2})
 }
 ));
+// var hostname = req.headers.host; // hostname = 'localhost:8080'
+// var pathname = url.parse(req.url).pathname; // pathname = '/MyApp'
+// console.log('http://' + hostname + pathname)
 
 passport.use(new GoogleStrategy({
   clientID: "536960197406-hm9jsjrcuhrrmu2q9n9p23k0tg774e1s.apps.googleusercontent.com",
   clientSecret: "9UNkD2MB9zSjHtAu0dWwZRn9",
-  callbackURL: "http://me.mydomain.com:3000/auth/google/callback"
+  callbackURL: HOST_URL + "/auth/google/callback"
 },
 function(accessToken, refreshToken, profile, done) {
     try {
