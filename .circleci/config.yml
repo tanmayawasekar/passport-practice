@@ -2,10 +2,11 @@ version: 2
 general:
   branches:
     only:
-      - dev
-      - staging
-      - prod
-      - circleci-project-setup
+      # - dev
+      # - staging
+      # - prod
+      # - circleci-project-setup
+      - master
 jobs:
   build:
     docker:
@@ -17,11 +18,8 @@ jobs:
           command: |
             # 1- Install AWS CLI
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-            echo "asd1"
             unzip awscli-bundle.zip
-            echo "asd2"
             ./awscli-bundle/install -b ~/bin/aws
-            echo "asd3"
             # ls ~/bin/aws
             # 2- Get the public IP of the current CircleCI runner
             PUBLIC_IP=$(curl ipinfo.io/ip)
@@ -35,7 +33,6 @@ jobs:
             # 5- Add an ingress rule to the security group
             ~/bin/aws ec2 authorize-security-group-ingress --region $AWS_REGION --group-id $SG_ID \
               --protocol tcp --port 22 --cidr $PUBLIC_IP/24
-            echo "asd4"
             # 6- Give the ingress rule some time to propogate
             sleep 5
             # 7- SSH to the server to deploy
@@ -63,4 +60,3 @@ jobs:
             # 8- Remove the ingress rule
             ~/bin/aws ec2 revoke-security-group-ingress --region $AWS_REGION --group-id $SG_ID \
             --protocol tcp --port 22 --cidr $PUBLIC_IP/24
-            echo "asd6"

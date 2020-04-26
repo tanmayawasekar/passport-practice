@@ -6,13 +6,13 @@ import re
 BRANCH_NAME = "master"
 REPO_URL = 'https://github.com/tanmayawasekar/passport-practice.git'  
 
-def deploy():
+def deploy(branch_name):
     site_folder = f'/home/ubuntu/sites/'  
     run(f'mkdir -p {site_folder}')  
     with cd(site_folder):  
         _install_docker()
         _install_docker_compose()
-        _get_latest_source()
+        _get_latest_source(branch_name)
         _remove_existing_images_containers()
         _docker_compose_up()
         # _build_docker_image()
