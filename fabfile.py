@@ -58,6 +58,9 @@ def _get_latest_source():
 def _install_docker():
     with settings(warn_only=True):
         output = run("sudo docker --version")
+        run("sudo service docker restart")
+        run("sudo usermod -aG docker user")
+
         if output.failed:
             run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
             run('sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
