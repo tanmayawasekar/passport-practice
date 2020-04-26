@@ -20,6 +20,7 @@ def deploy():
 def _docker_compose_up():
     run("pwd")
     run("ls -a")
+    run("export DOCKER_HOST=127.0.0.1:2375")
     run("docker-compose up -d")
 
 def _install_docker_compose():
@@ -58,8 +59,8 @@ def _get_latest_source():
 def _install_docker():
     with settings(warn_only=True):
         output = run("sudo docker --version")
-        run("sudo service docker restart")
-        run("sudo usermod -aG docker user")
+        # run("sudo service docker restart")
+        # run("sudo usermod -aG docker user")
 
         if output.failed:
             run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -')
