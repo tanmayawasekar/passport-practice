@@ -41,7 +41,7 @@ const user = new Schema({
   });
 
 process.on('loadModels', function () {
-  console.log('Import model ', user);
+  // console.log('Import model ', user);
   mongoose.model('User', user);
   // const m = new mongoose.model("User")({
   //   "username":"asd",

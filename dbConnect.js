@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const dbURI = process.env.MONGODB_CONNECTION_STRING || "mongodb://localhost:27017/passport-app";
 
 //console to check what is the dbURI refers to
-console.log("Database URL is =>>", dbURI);
+console.log("Mongodb Database URL is =>>", dbURI);
 
 mongoose.Promise = Promise;
 
@@ -35,12 +35,47 @@ db.on('disconnected', function () {
   console.log('Mongoose disconnected');
 });
 
-process.on('SIGINT', function () {
-  db.close(function () {
-    console.log('Mongoose disconnected through app termination');
-    process.exit(0);
-  });
+var knex = require('knex')({
+  client: 'mysql',
+  asyncStackTraces: true,
+  connection: {
+    host : '127.0.0.1',
+    user : 'root',
+    password : '7825tanmay',
+    database : 'passport-practice'
+  },
+  acquireConnectionTimeout: 1000,
+  pool: {
+    min: 1, max: 10,
+    afterCreate: function (conn, done) {
+      console.log("connected to msql new connection pool...")
+      done(conn)
+    }
+  }
 });
 
+process.on('SIGINT', function () {
+  knex.destroy(function () {
+    console.log('Mysql disconnected');
+    db.close(function () {
+      console.log('Mongoose disconnected through app termination');
+      process.exit(0);
+    });
+  })
+});
+
+process.on('uncaughtException', function (err) {
+  console.error(err);
+  knex.destroy(function () {
+    console.log('Mysql disconnected');
+    db.close(function () {
+      process.exit(1);
+    });
+  })
+})
+
 //Exported the database connection to be imported at the server
-exports.default = db;
+module.exports = {
+  mongoose: db,
+  knex
+}
