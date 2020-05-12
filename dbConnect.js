@@ -39,7 +39,7 @@ var knex = require('knex')({
   client: 'mysql',
   asyncStackTraces: true,
   connection: {
-    host : '127.0.0.1',
+    host : process.env.MY_SQL_HOST || '127.0.0.1',
     user : 'root',
     password : '7825tanmay',
     database : 'passport-practice'
