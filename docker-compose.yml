@@ -16,12 +16,6 @@ services:
     image: redis
     command: 
       - redis-server /usr/local/etc/redis/redis.conf
-      # - sudo apt-get install -y make wget gcc git
-      # - sudo apt-get install -y libmariadb-dev
-      # - git clone https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis.git
-      # - cd lib_mysqludf_redis/
-      # - make
-      # - make install 
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
       - ~/redis-data:/var/lib/redis
@@ -33,6 +27,14 @@ services:
     container_name: mysql-database
     restart: always
     # command: --default-authentication-plugin=mysql_native_password
+    command: 
+      - sudo apt-get install -y make wget gcc git
+      - sudo apt-get install -y libmariadb-dev
+      - git clone https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis.git
+      - cd lib_mysqludf_redis/
+      - sed -i 's/127.0.0.1/mysql-database/g' lib_mysqludf_redis.c
+      - make
+      - make install 
     environment :
       MYSQL_DATABASE: 'passport-practice'
       MYSQL_ROOT_PASSWORD : "7825tanmay"
@@ -44,6 +46,8 @@ services:
       - 3306
     volumes:
       - my-db:/var/lib/mysql
+    external_links:
+      - mysql-database
 
   practice-project:
     build: .
