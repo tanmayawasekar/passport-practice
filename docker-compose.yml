@@ -35,6 +35,7 @@ services:
       - sed -i 's/127.0.0.1/redis/g' lib_mysqludf_redis.c
       - make
       - make install 
+      - make installdb
     environment :
       MYSQL_DATABASE: 'passport-practice'
       MYSQL_ROOT_PASSWORD : "7825tanmay"
@@ -52,6 +53,8 @@ services:
   practice-project:
     build: .
     container_name: practice-project
+    command: 
+      - RUN npm install knex -g
     expose:
       - "3000"
     external_links: 
