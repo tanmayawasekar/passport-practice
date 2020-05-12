@@ -10,6 +10,16 @@ services:
       - 443:443
     external_links:
       - practice-project:3000
+    
+  redis:
+    image: redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ~/redis-data:/var/lib/redis
+
+    ports:
+      - "6379:6379"
 
   practice-project:
     build: .
