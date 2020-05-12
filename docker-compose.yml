@@ -12,38 +12,38 @@ services:
       - practice-project:3000
       - mysql-database
     
-    redis:
-      image: redis
-      command: 
-        - redis-server /usr/local/etc/redis/redis.conf
-        # - sudo apt-get install -y make wget gcc git
-        # - sudo apt-get install -y libmariadb-dev
-        # - git clone https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis.git
-        # - cd lib_mysqludf_redis/
-        # - make
-        # - make install 
-      volumes:
-        - ./redis.conf:/usr/local/etc/redis/redis.conf
-        - ~/redis-data:/var/lib/redis
-      ports:
-        - "6379:6379"
-  
-    mysql-database:
-      image : mysql:8.0.20
-      container_name: mysql-database
-      restart: always
-      # command: --default-authentication-plugin=mysql_native_password
-      environment :
-        MYSQL_DATABASE: 'passport-practice'
-        MYSQL_ROOT_PASSWORD : "7825tanmay"
-        MYSQL_PASSWORD : "7825tanmay"
-      ports :
-        - 3306:3306
-      expose:
-        # Opens port 3306 on the container
-        - 3306
-      volumes:
-        - my-db:/var/lib/mysql
+  redis:
+    image: redis
+    command: 
+      - redis-server /usr/local/etc/redis/redis.conf
+      # - sudo apt-get install -y make wget gcc git
+      # - sudo apt-get install -y libmariadb-dev
+      # - git clone https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis.git
+      # - cd lib_mysqludf_redis/
+      # - make
+      # - make install 
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ~/redis-data:/var/lib/redis
+    ports:
+      - "6379:6379"
+
+  mysql-database:
+    image : mysql:8.0.20
+    container_name: mysql-database
+    restart: always
+    # command: --default-authentication-plugin=mysql_native_password
+    environment :
+      MYSQL_DATABASE: 'passport-practice'
+      MYSQL_ROOT_PASSWORD : "7825tanmay"
+      MYSQL_PASSWORD : "7825tanmay"
+    ports :
+      - 3306:3306
+    expose:
+      # Opens port 3306 on the container
+      - 3306
+    volumes:
+      - my-db:/var/lib/mysql
 
   practice-project:
     build: .
