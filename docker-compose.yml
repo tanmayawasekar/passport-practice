@@ -13,7 +13,14 @@ services:
     
   redis:
     image: redis
-    command: redis-server /usr/local/etc/redis/redis.conf
+    command: 
+      - redis-server /usr/local/etc/redis/redis.conf
+      # - sudo apt-get install -y make wget gcc git
+      # - sudo apt-get install -y libmariadb-dev
+      # - git clone https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis.git
+      # - cd lib_mysqludf_redis/
+      # - make
+      # - make install 
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
       - ~/redis-data:/var/lib/redis
