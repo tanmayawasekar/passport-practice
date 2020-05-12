@@ -10,8 +10,7 @@ services:
       - 443:443
     external_links:
       - practice-project:3000
-      - mysql-database
-    
+
   redis:
     image: redis
     container_name: redis
@@ -55,6 +54,8 @@ services:
     container_name: practice-project
     expose:
       - "3000"
+    external_links: 
+      - mysql-database:3306
 
 # Names our volume
 volumes:
