@@ -4,6 +4,7 @@ module.exports = {
 
   development: {
     client: 'mysql',
+    host: process.env.MY_SQL_HOST,
     connection: {
       database: 'passport-practice',
       user:     'root',
@@ -20,6 +21,7 @@ module.exports = {
 
   staging: {
     client: 'mysql',
+    host: process.env.MY_SQL_HOST,
     connection: {
       database: 'passport-practice',
       user:     'root',
@@ -36,6 +38,7 @@ module.exports = {
 
   production: {
     client: 'mysql',
+    host: process.env.MY_SQL_HOST,
     connection: {
       database: 'passport-practice',
       user:     'root',
