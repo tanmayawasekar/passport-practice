@@ -30,12 +30,16 @@ services:
 
   mysql-database:
     image : mysql:5.7
-    restart: always
+    restart: unless-stopped
     container_name: mysql-database
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
     environment :
       MYSQL_DATABASE: 'passport-practice'
       MYSQL_ROOT_PASSWORD : "7825tanmay"
       MYSQL_PASSWORD : "7825tanmay"
+      MYSQL_USER : "tanmay"
     ports :
       - "3306:3306"
     volumes:
