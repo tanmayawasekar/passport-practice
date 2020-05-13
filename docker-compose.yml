@@ -45,7 +45,7 @@ services:
       MYSQL_ROOT_PASSWORD : "7825tanmay"
       MYSQL_PASSWORD : "7825tanmay"
     ports :
-      - "153306:3306"
+      - "13306:3306"
     volumes:
       - my-db:/var/lib/mysql
     external_links:
