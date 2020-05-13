@@ -62,7 +62,7 @@ services:
     expose:
       - "3000"
     external_links: 
-      - mysql-database
+      - mysql-database:3306
       - redis
     depends_on:
       - "mysql-database"
