@@ -66,6 +66,9 @@ services:
     external_links: 
       - mysql-database
       - redis
+    links: 
+      - mysql-database
+      - redis
     depends_on:
       - "mysql-database"
     networks :
