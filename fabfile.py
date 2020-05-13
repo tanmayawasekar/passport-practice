@@ -21,7 +21,7 @@ def _docker_compose_up():
     run("pwd")
     run("ls -a")
     run("sudo docker-compose up --build -d")
-    run('sudo docker exec practice-project sh -c "npm run migrate"')
+    # run('sudo docker exec practice-project sh -c "npm run migrate"')
     # command: --default-authentication-plugin=mysql_native_password
     # command: 
     #   - sudo apt-get install -y make wget gcc git
