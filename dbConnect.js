@@ -42,7 +42,8 @@ var knex = require('knex')({
     host : process.env.MY_SQL_HOST || '127.0.0.1',
     user : 'root',
     password : '7825tanmay',
-    database : 'passport-practice'
+    database : 'passport-practice',
+    insecureAuth: true,
   },
   acquireConnectionTimeout: 1000,
   pool: {
