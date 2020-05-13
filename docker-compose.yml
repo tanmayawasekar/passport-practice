@@ -10,6 +10,8 @@ services:
       - 443:443
     external_links:
       - practice-project:3000
+    depends_on: 
+      - "practice-project"
 
   redis:
     image: redis
@@ -21,8 +23,6 @@ services:
       - ~/redis-data:/var/lib/redis
     ports:
       - 6379:6379
-    depends_on: 
-      - "practice-project"
 
   mysql-database:
     image : mysql:8.0.20
@@ -57,14 +57,14 @@ services:
   practice-project:
     build: .
     container_name: practice-project
-    command: 
-      - RUN npm install knex -g
+    # command: 
+    #   - RUN npm install knex -g
     expose:
       - "3000"
     external_links: 
       - mysql-database:3306
+      - redis
     depends_on:
-      - "redis"
       - "mysql-database"
 
 # Names our volume
