@@ -27,15 +27,15 @@ services:
     container_name: mysql-database
     restart: always
     # command: --default-authentication-plugin=mysql_native_password
-    command: 
-      - sudo apt-get install -y make wget gcc git
-      - sudo apt-get install -y libmariadb-dev
-      - git clone https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis.git
-      - cd lib_mysqludf_redis/
-      - sed -i 's/127.0.0.1/redis/g' lib_mysqludf_redis.c
-      - make
-      - make install 
-      - make installdb
+    # command: 
+    #   - sudo apt-get install -y make wget gcc git
+    #   - sudo apt-get install -y libmariadb-dev
+    #   - git clone https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis.git
+    #   - cd lib_mysqludf_redis/
+    #   - sed -i 's/127.0.0.1/redis/g' lib_mysqludf_redis.c
+    #   - make
+    #   - make install 
+    #   - make installdb
     environment :
       MYSQL_DATABASE: 'passport-practice'
       MYSQL_ROOT_PASSWORD : "7825tanmay"
