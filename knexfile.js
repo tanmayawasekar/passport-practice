@@ -6,6 +6,7 @@ module.exports = {
     client: 'mysql',
     connection: {
       host: 'mysql-database',
+      insecureAuth: true,
       database: 'passport-practice',
       user:     'root',
       password: '7825tanmay'
