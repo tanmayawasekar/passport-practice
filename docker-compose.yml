@@ -20,7 +20,9 @@ services:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
       - ~/redis-data:/var/lib/redis
     ports:
-      - "6379:6379"
+      - 6379:6379
+    depends_on: 
+      - "practice-project"
 
   mysql-database:
     image : mysql:8.0.20
@@ -49,6 +51,8 @@ services:
       - my-db:/var/lib/mysql
     external_links:
       - redis
+    depends_on:
+      - "redis"
 
   practice-project:
     build: .
@@ -59,6 +63,9 @@ services:
       - "3000"
     external_links: 
       - mysql-database:3306
+    depends_on:
+      - "redis"
+      - "mysql-database"
 
 # Names our volume
 volumes:
