@@ -9,6 +9,8 @@ services:
       - ~/redis-data:/var/lib/redis
     ports:
       - 6379:6379
+    networks :
+      - practice-project-network
 
   nginx: 
     image: nginx:latest
@@ -22,6 +24,8 @@ services:
       - practice-project:3000
     depends_on: 
       - "practice-project"
+    networks :
+      - practice-project-network
 
   mysql-database:
     image : mysql:8.0.20
@@ -51,6 +55,8 @@ services:
       - redis
     depends_on:
       - "redis"
+    networks :
+      - practice-project-network
 
   practice-project:
     build: .
@@ -62,7 +68,14 @@ services:
       - redis
     depends_on:
       - "mysql-database"
+    networks :
+      - practice-project-network
 
 # Names our volume
 volumes:
   my-db:
+    driver: local
+
+networks :
+  practice-project-network :
+    driver : bridge 
