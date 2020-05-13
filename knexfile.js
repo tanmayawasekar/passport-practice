@@ -4,8 +4,8 @@ module.exports = {
 
   development: {
     client: 'mysql',
-    host: 'mysql-database',
     connection: {
+      host: 'mysql-database',
       database: 'passport-practice',
       user:     'root',
       password: '7825tanmay'
@@ -21,8 +21,8 @@ module.exports = {
 
   staging: {
     client: 'mysql',
-    host: 'mysql-database',
     connection: {
+      host: 'mysql-database',
       database: 'passport-practice',
       user:     'root',
       password: '7825tanmay'
@@ -38,8 +38,8 @@ module.exports = {
 
   production: {
     client: 'mysql',
-    host: 'mysql-database',
     connection: {
+      host: 'mysql-database',
       database: 'passport-practice',
       user:     'root',
       password: '7825tanmay'
