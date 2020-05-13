@@ -1,5 +1,16 @@
 version: '3'
 services:
+  redis:
+    image: redis
+    container_name: redis
+    command: 
+      - redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ~/redis-data:/var/lib/redis
+    ports:
+      - 6379:6379
+
   nginx: 
     image: nginx:latest
     container_name: production_nginx
@@ -12,17 +23,6 @@ services:
       - practice-project:3000
     depends_on: 
       - "practice-project"
-
-  redis:
-    image: redis
-    container_name: redis
-    command: 
-      - redis-server /usr/local/etc/redis/redis.conf
-    volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
-      - ~/redis-data:/var/lib/redis
-    ports:
-      - 6379:6379
 
   mysql-database:
     image : mysql:8.0.20
@@ -57,8 +57,6 @@ services:
   practice-project:
     build: .
     container_name: practice-project
-    # command: 
-    #   - RUN npm install knex -g
     expose:
       - "3000"
     external_links: 

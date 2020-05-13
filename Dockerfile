@@ -12,9 +12,9 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-# RUN npm install knex -g
+RUN npm install knex -g
 
-# RUN knex migrate:up
+RUN knex migrate:up
 
 EXPOSE 3000
 CMD [ "npm", "start" ]
