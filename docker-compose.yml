@@ -2,6 +2,7 @@ version: '3'
 services:
   redis:
     image: redis
+    container_name: redis_container
     command: 
       - redis-server /usr/local/etc/redis/redis.conf
     volumes:
@@ -31,16 +32,6 @@ services:
     image : mysql:5.7
     restart: always
     container_name: mysql-database
-    # command: --default-authentication-plugin=mysql_native_password
-    # command: 
-    #   - sudo apt-get install -y make wget gcc git
-    #   - sudo apt-get install -y libmariadb-dev
-    #   - git clone https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis.git
-    #   - cd lib_mysqludf_redis/
-    #   - sed -i 's/127.0.0.1/redis/g' lib_mysqludf_redis.c
-    #   - make
-    #   - make install 
-    #   - make installdb
     environment :
       MYSQL_DATABASE: 'passport-practice'
       MYSQL_ROOT_PASSWORD : "7825tanmay"
@@ -50,9 +41,9 @@ services:
     volumes:
       - my-db:/var/lib/mysql
     external_links:
-      - redis
+      - redis_container
     depends_on:
-      - "redis"
+      - "redis_container"
     networks :
       - practice-project-network
 

@@ -22,6 +22,16 @@ def _docker_compose_up():
     run("ls -a")
     run("sudo docker-compose up --build -d")
     run('sudo docker exec practice-project sh -c "npm run migrate"')
+    # command: --default-authentication-plugin=mysql_native_password
+    # command: 
+    #   - sudo apt-get install -y make wget gcc git
+    #   - sudo apt-get install -y libmariadb-dev
+    #   - git clone https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis.git
+    #   - cd lib_mysqludf_redis/
+    #   - sed -i 's/127.0.0.1/redis/g' lib_mysqludf_redis.c
+    #   - make
+    #   - make install 
+    #   - make installdb
 
 def _install_docker_compose():
     with settings(warn_only=True):
