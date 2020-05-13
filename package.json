@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm install && node app.js"
+    "start": "npm install && node app.js",
+    "migrate": "knex migrate:up"
   },
   "keywords": [],
   "author": "",

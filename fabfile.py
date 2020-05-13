@@ -21,6 +21,7 @@ def _docker_compose_up():
     run("pwd")
     run("ls -a")
     run("sudo docker-compose up --build -d")
+    run('docker exec practice-project sh -c "npm run migrate"')
 
 def _install_docker_compose():
     with settings(warn_only=True):
