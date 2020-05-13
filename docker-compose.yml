@@ -45,10 +45,7 @@ services:
       MYSQL_ROOT_PASSWORD : "7825tanmay"
       MYSQL_PASSWORD : "7825tanmay"
     ports :
-      - 3306:3306
-    expose:
-      # Opens port 3306 on the container
-      - 3306
+      - "153306:3306"
     volumes:
       - my-db:/var/lib/mysql
     external_links:
