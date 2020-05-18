@@ -332,7 +332,7 @@ app.get('/order', async function (req, res) {
 })
 
 app.get('/order/redis', async function (req, res) {
-  const redisKey = 'all_orders'+req.user._id.toString()
+  const redisKey = 'all_orders_'+req.user._id.toString()
   redisClient.LLEN(redisKey, function (error, response) {
     console.log("redisClient.LLEN", error, response, JSON.stringify(response))
     redisClient.LRANGE(redisKey, 0, response -1, function (lrangeResponse) {
