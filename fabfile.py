@@ -21,8 +21,9 @@ def deploy(branch_name):
 def _docker_compose_up():
     run("pwd")
     run("ls -a")
-    output = run("mkdir ~/redis-data")
-    output = run("mkdir ~/mongodb/mongo-volume")
+    with settings(warn_only=True):
+        run("mkdir ~/redis-data")
+        run("mkdir ~/mongodb/mongo-volume")
     run("sudo docker-compose down")
     run("sudo docker-compose up --build -d")
     # https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis
