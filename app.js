@@ -1,5 +1,10 @@
+// Important Links ------->>>>>>>-->>
+// Important Links ------->>>>>>>
+// Important Links ------->>>>>>>
+// Important Links ------->>>>>>>
 // https://github.com/mike-marcacci/node-redlock
-const { knex } = require("./dbConnect")
+// https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis
+const { knex, redisClient } = require("./dbConnect")
 const http = require("http")
 const express = require("express")
 const session = require("express-session")
@@ -61,22 +66,6 @@ passport.deserializeUser(function (user, done) {
   done(null, user)
 });
 
-passport.use(new LocalStrategy(
-  function (username, password, done) {
-    console.log(username, password)
-    mongoose.model("User").findOne({ username: username }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (user.password != password) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-));
-
 // passport.use(new FacebookStrategy({
 //   clientID: "523097417894216",
 //   clientSecret: "1478be8d42e0c967d44d966485232d0b",
@@ -91,6 +80,31 @@ passport.use(new LocalStrategy(
 //   done(null, {id:2})
 // }
 // ));
+
+passport.use(new LocalStrategy(
+  {passReqToCallback: true},
+  (req, username, password, done) => {
+    if (req.isRegisteredNow) {
+      done(null, req.registerdUser)
+    }
+    else {
+      console.log(username, password)
+      mongoose.model("User").findOne({ username: username }, function (err, user) {
+        if (err) {
+          console.log("err", err)
+          return done(err);
+        }
+        if (!user) {
+          return done(null, false, { message: 'Incorrect username.' });
+        }
+        if (user.password != password) {
+          return done(null, false, { message: 'Incorrect password.' });
+        }
+        return done(null, user);
+      });
+    }
+  }
+))
 
 passport.use(new GoogleStrategy({
   clientID: "536960197406-hm9jsjrcuhrrmu2q9n9p23k0tg774e1s.apps.googleusercontent.com",
@@ -151,24 +165,52 @@ app.use(passport.session());
 
 app.get('/auth/google', passport.authenticate('google', { scope: ['openid', 'profile', 'email'] }));
 
-
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
     res.redirect('/');
   });
 
-// app.post('/login',
-//   passport.authenticate('local'), function(req, res) {
-//     if(req.user) {
-//       req.session.user = req.user
-//       res.redirect("/")
-//     }
-//     else {
-//       res.redirect("/login")
-//     }
-//   }
-// );
+app.post('/login',
+  passport.authenticate('local', { failureRedirect: '/login' }),
+  function (req, res) {
+    res.redirect('/')
+  }
+);
+
+app.post('/register',
+  function (req, res, next) {
+    mongoose.model("User").findOne({ username: req.body.username }, function (err, user) {
+      if (err || user) {
+        return res.redirect('/login')
+      }
+      else {
+        user = new mongoose.model("User")({
+          email: req.body.email,
+          name: req.body.name,
+          password: req.body.password,
+          username: req.body.username
+        }).save()
+          .then(user => {
+            req.isRegisteredNow = true
+            req.registerdUser = user
+            next()
+          })
+          .catch(
+            error => {
+              console.log("error", error);
+              res.redirect('/login')
+            }
+          )
+      }
+    })
+  },
+  passport.authenticate('local', { failureRedirect: '/login' }),
+  function (req, res) {
+    res.redirect('/')
+  }
+);
+
 
 // function getLoginPageLock(req, res, next) {
 //   var resource = 'locks:account:322452';
@@ -192,7 +234,7 @@ app.get('/auth/google/callback',
 //           console.error(err);
 //         });  
 //       }, 1500)
-      
+
 //     }
 //     next()
 //   })
@@ -206,14 +248,27 @@ app.get('/auth/google/callback',
 
 app.get("/login", function (req, res) {
   // setTimeout(function () {
-  res.render('login', { template: 'login' })
-    // req.redLock.unlock()
-    //   .catch(function (err) {
-    //     // we weren't able to reach redis; your lock will eventually
-    //     // expire, but you probably want to log this error
-    //     console.error(err);
-    //     // res.render('login', { template: 'login' , resourceLock: true})
-    //   });
+  res.render('login', { login: true })
+  // req.redLock.unlock()
+  //   .catch(function (err) {
+  //     // we weren't able to reach redis; your lock will eventually
+  //     // expire, but you probably want to log this error
+  //     console.error(err);
+  //     // res.render('login', { template: 'login' , resourceLock: true})
+  //   });
+  // }, 1000)
+})
+
+app.get("/register", function (req, res) {
+  // setTimeout(function () {
+  res.render('login', { register: true })
+  // req.redLock.unlock()
+  //   .catch(function (err) {
+  //     // we weren't able to reach redis; your lock will eventually
+  //     // expire, but you probably want to log this error
+  //     console.error(err);
+  //     // res.render('login', { template: 'login' , resourceLock: true})
+  //   });
   // }, 1000)
 })
 
@@ -246,6 +301,14 @@ app.use(function (req, res, next) {
   }
 })
 
+app.get('/order/all', async function (req, res) {
+  allOrder = await knex('order').where({}).join('order_api_logs', 'order_api_logs.order_id', 'order.id')
+  res.render('dashboard',  {
+    order: true,
+    orderList: JSON.stringify(allOrder)
+  })
+})
+
 app.get("/", function (req, res) {
   res.render('dashboard', {
     user: req.user,
@@ -259,10 +322,29 @@ app.get('/logout', function (req, res) {
   res.redirect('/login');
 });
 
-app.get('/order', function (req, res) {
+app.get('/order', async function (req, res) {
+  allOrder = await knex('order').where({}).join('order_api_logs', 'order_api_logs.order_id', 'order.id')
   res.render('order', {
     user: req.user,
-    order: true
+    order: true,
+    orderList: allOrder.map((e) => e.item_name + '~' + e.item_quantity + '~' + e.order_id)
+  })
+})
+
+app.get('/order/redis', async function (req, res) {
+  const redisKey = 'all_orders'+req.user._id.toString()
+  redisClient.LLEN(redisKey, function (error, response) {
+    console.log("redisClient.LLEN", error, response, JSON.stringify(response))
+    redisClient.LRANGE(redisKey, 0, response -1, function (lrangeResponse) {
+      console.log("redisClient.LRANGE", error, response, JSON.stringify(response))
+      res.render('order', {
+        user: req.user,
+        redisOrderList: lrangeResponse.map(e => {
+          parsedOrder = JSON.parse(e)
+          return parsedOrder.item_name + '~' + parsedOrder.item_quantity + '~' + parsedOrder.order_id
+        })
+      })  
+    })
   })
 })
 

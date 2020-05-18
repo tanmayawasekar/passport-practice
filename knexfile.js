@@ -5,7 +5,7 @@ module.exports = {
   development: {
     client: 'mysql',
     connection: {
-      host: 'mysql-database',
+      host: process.env.MY_SQL_HOST || '127.0.0.1',
       insecureAuth: true,
       database: 'passport-practice',
       user:     'root',
@@ -23,7 +23,7 @@ module.exports = {
   staging: {
     client: 'mysql',
     connection: {
-      host: 'mysql-database',
+      host: process.env.MY_SQL_HOST || '127.0.0.1',
       database: 'passport-practice',
       user:     'root',
       password: '7825tanmay'
@@ -40,7 +40,7 @@ module.exports = {
   production: {
     client: 'mysql',
     connection: {
-      host: 'mysql-database',
+      host: process.env.MY_SQL_HOST || '127.0.0.1',
       database: 'passport-practice',
       user:     'root',
       password: '7825tanmay'

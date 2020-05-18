@@ -11,23 +11,58 @@
   {{/if}}
 
   {{#unless user}}
-    <a href="auth/google">Login with google</a>
+    {{!-- <a href="auth/google">Login with google</a> --}}
+    {{#if login}}
+    <form action="/login" method="POST">
+      <input type="text" name="username" placeholder="UserName">
+      <input type="password" name="password" id="password">
+      <input type="submit" value="Submit">
+    </form>
+    <a href="register">Register</a>
+    {{/if}}
+    {{#if register}}
+      <form action="register" method="POST">
+        <input type="text" name="username" placeholder="UserName">
+        <input type="text" name="name" placeholder="Name">
+        <input type="email" name="email" id="email">
+        <input type="password" name="password" id="password" placeholder="Password">
+        <input type="submit" value="Submit">
+      </form>
+    {{/if}}
+    
   {{/unless}}
 
   {{#if order}}
-  <form action="order" method="post"> 
+  <form action="/order" method="post"> 
     <input type="text" name="item">
     <input type="number" name="itemQ">
     <input type="submit" value="Submit">
   </form>
+  <a href="/order/redis" target="_blank">GET Orders from redis</a>
   {{/if}}
-  
+
+  {{#if orderList}}
+    <ul class="people_list">
+      {{#each orderList}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ul>
+  {{/if}}
+
+  {{#if redisOrderList}}
+        <ul class="people_list">
+      {{#each redisOrderList}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ul>
+  {{/if}}
+
   {{#if dashboard}}
-  <a href="order">Place a order</a>
+  <a href="order/">Place a order</a>
   {{/if}}
   
   {{#if checkout}}
-  <form action="payment/success/" method="POST">
+  <form action="/payment/success/" method="POST">
     <script
         src="https://checkout.razorpay.com/v1/checkout.js"
         data-key={{razorPay.dataKey}}

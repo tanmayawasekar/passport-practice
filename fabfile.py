@@ -15,23 +15,24 @@ def deploy(branch_name):
         _get_latest_source(branch_name)
         _remove_existing_images_containers()
         _docker_compose_up()
+        # _docker_mysql_install()
         # _build_docker_image()
 
 def _docker_compose_up():
     run("pwd")
     run("ls -a")
     run("sudo docker-compose up --build -d")
-    # run('sudo docker exec practice-project sh -c "npm run migrate"')
-    # command: --default-authentication-plugin=mysql_native_password
-    # command: 
-    #   - sudo apt-get install -y make wget gcc git
-    #   - sudo apt-get install -y libmariadb-dev
-    #   - git clone https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis.git
-    #   - cd lib_mysqludf_redis/
-    #   - sed -i 's/127.0.0.1/redis/g' lib_mysqludf_redis.c
-    #   - make
-    #   - make install 
-    #   - make installdb
+    # https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis
+    run('sudo docker exec mysql sh -c "apt-get update -y")
+    run('sudo docker exec mysql sh -c "apt-get install -y make wget gcc git")
+    run('sudo docker exec mysql sh -c "apt-get install -y libmariadb-dev policycoreutils")
+    run('sudo docker exec mysql sh -c "apt-get install libmysqlclient-dev -y")
+    run('sudo docker exec mysql sh -c "git clone https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis.git")
+    run('sudo docker exec mysql sh -c "cd lib_mysqludf_redis/")
+    run('sudo docker exec mysql sh -c "sed -i \'s/127.0.0.1/redis/g\' lib_mysqludf_redis.c")
+    run('sudo docker exec mysql sh -c "make INCLUDE_PATH=`mysql_config --variable=pkgincludedir`")
+    run('sudo docker exec mysql sh -c "make install")
+    # run('sudo docker exec mysql sh -c "make installdb")
 
 def _install_docker_compose():
     with settings(warn_only=True):

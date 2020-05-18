@@ -1,8 +1,9 @@
 //Bring in the mongoose module
+const { promisify } = require("util");
 const mongoose = require('mongoose');
 
 // const dbURI = "mongodb://localhost:27017/kitch-display-ordering";
-const dbURI = process.env.MONGODB_CONNECTION_STRING || "mongodb://localhost:27017/passport-app";
+const dbURI = process.env.MONGODB_CONNECTION_STRING ||  "mongodb://localhost:27017/passport-app";
 
 //console to check what is the dbURI refers to
 console.log("Mongodb Database URL is =>>", dbURI);
@@ -14,7 +15,8 @@ mongoose.connect(dbURI, {
   'config': {
     'autoIndex': false
   },
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
 
 mongoose.set('useFindAndModify', false);
@@ -100,11 +102,17 @@ process.on('uncaughtException', function (err) {
 // );
 
 knex.on('query-response', function(response, obj, builder) {
-  console.log("------->\n",response,"------->\n", obj,"------->\n", builder);
+  // console.log("------->\n",response,"------->\n", obj,"------->\n", builder);
 })
+
+const redis = require("redis");
+const redisClient = redis.createClient({
+  host: process.env.REDIS_HOST || "127.0.0.1"
+});
 
 //Exported the database connection to be imported at the server
 module.exports = {
   knex,
+  redisClient
   // redlock
 }
