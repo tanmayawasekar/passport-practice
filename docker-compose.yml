@@ -5,7 +5,7 @@ services:
     restart: always
     container_name: redis
     volumes:
-      - ~/redis.conf:/usr/local/etc/redis/redis.conf /usr/local/etc/redis/redis.conf
+      - ./redis.conf:/usr/local/etc/redis/redis.conf /usr/local/etc/redis/redis.conf
       - ~/redis-data:/var/lib/redis
     ports:
       - 6379:6379
@@ -28,7 +28,7 @@ services:
       - practice-project-network
     volumes: 
       - ~/mongodb/mongo-volume:/data/db
-      - ~/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
 
   mysql:
     image : mysql:5.7
