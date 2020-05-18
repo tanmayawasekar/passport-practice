@@ -29,9 +29,9 @@ def _docker_compose_up():
     run('sudo docker exec mysql sh -c "apt-get install libmysqlclient-dev -y")
     run('sudo docker exec mysql sh -c "git clone https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis.git")
     run('sudo docker exec mysql sh -c "cd lib_mysqludf_redis/")
-    run('sudo docker exec mysql sh -c "sed -i \'s/127.0.0.1/redis/g\' lib_mysqludf_redis.c")
-    run('sudo docker exec mysql sh -c "make INCLUDE_PATH=`mysql_config --variable=pkgincludedir`")
-    run('sudo docker exec mysql sh -c "make install")
+    run('sudo docker exec mysql sh -c "cd lib_mysqludf_redis/ && sed -i \'s/127.0.0.1/redis/g\' lib_mysqludf_redis.c")
+    run('sudo docker exec mysql sh -c "cd lib_mysqludf_redis/ && make INCLUDE_PATH=`mysql_config --variable=pkgincludedir`")
+    run('sudo docker exec mysql sh -c "cd lib_mysqludf_redis/ && make install")
     # run('sudo docker exec mysql sh -c "make installdb")
 
 def _install_docker_compose():
