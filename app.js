@@ -344,7 +344,7 @@ app.get('/order/redis', async function (req, res) {
             user: req.user,
             redisOrderList: lrangeResponse.map(e => {
               parsedOrder = JSON.parse(e)
-              return parsedOrder.item_name + '~' + parsedOrder.item_quantity + '~' + parsedOrder.order_id
+              return parsedOrder.item_name + '~' + parsedOrder.item_quantity + '~' + parsedOrder.order_uuid
             })
           })  
         })
