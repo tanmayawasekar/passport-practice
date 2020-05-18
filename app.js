@@ -336,8 +336,10 @@ app.get('/order/redis', async function (req, res) {
   redisClient.LLEN(redisKey, function (error, response) {
     console.log("redisClient.LLEN",redisKey, error, response, JSON.stringify(response))
     if(response) {
-        redisClient.LRANGE(redisKey, 0, response -1, function (lrangeResponse) {
-          console.log("redisClient.LRANGE", error, response, JSON.stringify(response))
+        const range = response -1
+        console.log(range, redisKey)
+        redisClient.LRANGE(redisKey, 0, range, function (lrangeResponse) {
+          console.log("redisClient.LRANGE", error, lrangeResponse, JSON.stringify(lrangeResponse))
           res.render('order', {
             user: req.user,
             redisOrderList: lrangeResponse.map(e => {
