@@ -334,17 +334,19 @@ app.get('/order', async function (req, res) {
 app.get('/order/redis', async function (req, res) {
   const redisKey = 'all_orders_'+req.user._id.toString()
   redisClient.LLEN(redisKey, function (error, response) {
-    console.log("redisClient.LLEN", error, response, JSON.stringify(response))
-    redisClient.LRANGE(redisKey, 0, response -1, function (lrangeResponse) {
-      console.log("redisClient.LRANGE", error, response, JSON.stringify(response))
-      res.render('order', {
-        user: req.user,
-        redisOrderList: lrangeResponse.map(e => {
-          parsedOrder = JSON.parse(e)
-          return parsedOrder.item_name + '~' + parsedOrder.item_quantity + '~' + parsedOrder.order_id
+    console.log("redisClient.LLEN",redisKey, error, response, JSON.stringify(response))
+    if(response) {
+        redisClient.LRANGE(redisKey, 0, response -1, function (lrangeResponse) {
+          console.log("redisClient.LRANGE", error, response, JSON.stringify(response))
+          res.render('order', {
+            user: req.user,
+            redisOrderList: lrangeResponse.map(e => {
+              parsedOrder = JSON.parse(e)
+              return parsedOrder.item_name + '~' + parsedOrder.item_quantity + '~' + parsedOrder.order_id
+            })
+          })  
         })
-      })  
-    })
+    }
   })
 })
 
