@@ -6,7 +6,7 @@ services:
     container_name: redis
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf /usr/local/etc/redis/redis.conf
-      - ~/redis-data:/var/lib/redis
+      - redis-data-volume:/var/lib/redis
     ports:
       - 6379:6379
     networks :
@@ -27,7 +27,7 @@ services:
     networks :
       - practice-project-network
     volumes: 
-      - ~/mongodb/mongo-volume:/data/db
+      - mongodb-data-volume:/data/db
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
 
   mysql:
@@ -94,6 +94,10 @@ volumes:
   mysql-data-volume:
     driver: local
   mysql-plugin-volume:
+    driver: local
+  mongodb-data-volume:
+    driver: local
+  redis-data-volume:
     driver: local
 
 networks :
