@@ -6,7 +6,7 @@ services:
     container_name: redis
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
-      - redis-data-volume:/var/lib/redis
+      - ~/lib-redis:/var/lib/redis
       - ~/db-redis:/usr/local/var/db/redis/
     ports:
       - 6379:6379

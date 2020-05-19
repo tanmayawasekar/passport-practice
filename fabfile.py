@@ -21,7 +21,9 @@ def deploy(branch_name):
 def _docker_compose_up():
     run("sudo docker-compose down")
     run("mkdir -p ~/db-redis")
+    run("mkdir -p ~/lib-redis")
     run("sudo chown -R 1001:1001 ~/db-redis")
+    run("sudo chown -R 1001:1001 ~/lib-redis")
     run("sudo docker-compose up --build -d")
     # run("sudo docker system prune -y")
     # https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis
