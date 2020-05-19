@@ -12,6 +12,7 @@ services:
       - 6379:6379
     networks :
       - practice-project-network
+    command: redis-server /usr/local/etc/redis/redis.conf
   
   mongo:
     image: mongo:4.2
