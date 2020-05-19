@@ -7,7 +7,7 @@ services:
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
       - redis-data-volume:/var/lib/redis
-      - redis-data-volume2:/usr/local/var/db/redis/
+      - ~/db-redis:/usr/local/var/db/redis/
     ports:
       - 6379:6379
     networks :
