@@ -19,10 +19,6 @@ def deploy(branch_name):
         # _build_docker_image()
 
 def _docker_compose_up():
-    run("pwd")
-    run("ls -a")
-    with settings(warn_only=True):
-        run("mkdir ~/redis-data")
     run("sudo docker-compose down")
     run("sudo docker-compose up --build -d")
     # https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis
