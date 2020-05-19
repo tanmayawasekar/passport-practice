@@ -23,8 +23,6 @@ def _docker_compose_up():
     run("ls -a")
     with settings(warn_only=True):
         run("mkdir ~/redis-data")
-        run("mkdir ~/mongodb")
-        run("mkdir ~/mongodb/mongo-volume")
     run("sudo docker-compose down")
     run("sudo docker-compose up --build -d")
     # https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis
