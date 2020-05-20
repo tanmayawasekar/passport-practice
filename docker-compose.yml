@@ -2,7 +2,7 @@ version: "3"
 services:
   redis:
     image: redis:6
-    restart: always
+    restart: on-failure:3
     container_name: redis
     volumes:
       - redis-data:/data
@@ -17,7 +17,7 @@ services:
   
   mongo:
     image: mongo:4.2
-    restart: always
+    restart: on-failure:3
     container_name: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -36,7 +36,7 @@ services:
   mysql:
     image : mysql:5.7
     container_name: mysql
-    restart: always
+    restart: on-failure:3
     environment :
       MYSQL_DATABASE: "passport-practice"
       MYSQL_ROOT_PASSWORD : "7825tanmay"
@@ -59,7 +59,7 @@ services:
   practice-project:
     build: .
     container_name: practice-project
-    restart: always
+    restart: on-failure:3
     expose:
       - 3000
     environment: 
