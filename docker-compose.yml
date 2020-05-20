@@ -1,18 +1,19 @@
 version: "3"
 services:
   redis:
-    image: redis
+    image: redis:6
     restart: always
     container_name: redis
     volumes:
+      - redis-data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
-      - ~/lib-redis:/var/lib/redis
-      - ~/db-redis:/usr/local/var/db/redis/
+      #   - redis-data-volume:/var/lib/redis
+      #   - redis-data-volume2:/usr/local/var/db/redis/
     ports:
       - 6379:6379
     networks :
       - practice-project-network
-    command: redis-server /usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf --loglevel debug
   
   mongo:
     image: mongo:4.2
@@ -102,6 +103,8 @@ volumes:
   redis-data-volume:
     driver: local
   redis-data-volume2:
+    driver: local
+  redis-data:
     driver: local
 
 networks :
