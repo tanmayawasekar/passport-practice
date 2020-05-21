@@ -349,6 +349,9 @@ app.get('/order/redis', async function (req, res) {
           })  
         })
     }
+    else {
+        return res.render('order', {user: req.user})
+    }
   })
 })
 
@@ -446,6 +449,69 @@ app.post('/payment/success', async function (req, res) {
     })
   }
 })
+var AWS = require('aws-sdk');
+// Set the region 
+AWS.config.update({region: 'us-east-1', accessKeyId=process.env.SES_KEY, secretAccessKey:process.env.SES_PASSWORD});
 
+app.post("/sendemail", function (req, res) {
+// Give SES the details and let it construct the message for you.
+// Load the AWS SDK for Node.js
+// Create sendEmail params 
+var params = {
+  Destination: { /* required */
+    CcAddresses: [
+    //   'EMAIL_ADDRESS',
+      /* more items */
+    ],
+    ToAddresses: [
+      'tanmayawasekar@gmail.com',
+      /* more items */
+    ]
+  },
+  Message: { /* required */
+    Body: { /* required */
+    //   Html: {
+    //    Charset: "UTF-8",
+    //    Data: "HTML_FORMAT_BODY"
+    //   },
+      Text: {
+       Charset: "UTF-8",
+       Data: req.body.emailMessage
+      }
+     },
+     Subject: {
+      Charset: 'UTF-8',
+      Data: 'Test email'
+     }
+    },
+  Source: 'tanmayawasekar@gmail.com', /* required */
+  ReplyToAddresses: [
+     'tanmayawasekar@gmail.com',
+    /* more items */
+  ],
+};
+
+// Create the promise and SES service object
+var sendPromise = new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(params).promise();
+
+// Handle promise's fulfilled/rejected states
+sendPromise.then(
+  function(data) {
+    console.log(data.MessageId, data);
+    res.render('dashboard', {
+        user: req.user,
+        message: data.MessageId,
+        order: true
+      })
+  }).catch(
+    function(err) {
+    console.error(err, err.stack);
+    res.render('dashboard', {
+        user: req.user,
+        error: err,
+        order: true
+      })
+  });
+})
 
 http.createServer(app).listen(3000)

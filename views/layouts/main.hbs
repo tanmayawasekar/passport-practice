@@ -5,6 +5,8 @@
     <title>Example App</title>
 </head>
 <body>
+  <h1>{{error}}</h1>
+  <h2>{{message}}</h2>
 
   {{#if resourceLock}}
     <h1>Resource is locked please try again after a while.</h1>
@@ -39,6 +41,10 @@
     <input type="submit" value="Submit">
   </form>
   <a href="/order/redis" target="_blank">GET Orders from redis</a>
+  <form action="/sendemail" method="post">
+    <input type="text" name="emailMessage" id="emailMessage">
+    <input type="submit" value="Send Email">
+  </form>
   {{/if}}
 
   {{#if orderList}}
