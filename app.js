@@ -14,8 +14,8 @@ const passport = require("passport")
 const logger = require('morgan')
 const path = require('path')
 const LocalStrategy = require('passport-local').Strategy
-  , FacebookStrategy = require('passport-facebook').Strategy
-  , GoogleStrategy = require('passport-google-oauth20').Strategy;
+    , FacebookStrategy = require('passport-facebook').Strategy
+    , GoogleStrategy = require('passport-google-oauth20').Strategy;
 var hbs = require('express-handlebars');
 const key_id = 'rzp_test_GPW4CVjL9J4aIh'
 const key_secret = 'b2yGv5i2E9ngrhhF9McKBusT';
@@ -24,15 +24,15 @@ const Razorpay = require('razorpay')
 // MYSQL REDIS PLUGIN// https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis
 // Write Through Redis Strategy. https://medium.com/wultra-blog/achieving-high-performance-with-postgresql-and-redis-deddb7012b16
 function disableHTTPCaching(req, res, next) {
-  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-  response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-  response.setHeader("Expires", "0"); // Proxies.
-  next()
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+    response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+    response.setHeader("Expires", "0"); // Proxies.
+    next()
 }
 
 const razorPay = new Razorpay({
-  key_id,
-  key_secret,
+    key_id,
+    key_secret,
 });
 
 require("./models")
@@ -43,7 +43,7 @@ app.set('trust proxy', 1);
 
 // view engine setup
 app.engine('hbs', hbs({
-  extname: 'hbs'
+    extname: 'hbs'
 }));
 app.set('view engine', 'hbs');
 // app.set('views', path.join(__dirname, 'views'));
@@ -59,11 +59,11 @@ app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 passport.serializeUser(function (user, done) {
-  done(null, user);
+    done(null, user);
 });
 
 passport.deserializeUser(function (user, done) {
-  done(null, user)
+    done(null, user)
 });
 
 // passport.use(new FacebookStrategy({
@@ -82,76 +82,76 @@ passport.deserializeUser(function (user, done) {
 // ));
 
 passport.use(new LocalStrategy(
-  {passReqToCallback: true},
-  (req, username, password, done) => {
-    if (req.isRegisteredNow) {
-      done(null, req.registerdUser)
+    { passReqToCallback: true },
+    (req, username, password, done) => {
+        if (req.isRegisteredNow) {
+            done(null, req.registerdUser)
+        }
+        else {
+            console.log(username, password)
+            mongoose.model("User").findOne({ username: username }, function (err, user) {
+                if (err) {
+                    console.log("err", err)
+                    return done(err);
+                }
+                if (!user) {
+                    return done(null, false, { message: 'Incorrect username.' });
+                }
+                if (user.password != password) {
+                    return done(null, false, { message: 'Incorrect password.' });
+                }
+                return done(null, user);
+            });
+        }
     }
-    else {
-      console.log(username, password)
-      mongoose.model("User").findOne({ username: username }, function (err, user) {
-        if (err) {
-          console.log("err", err)
-          return done(err);
-        }
-        if (!user) {
-          return done(null, false, { message: 'Incorrect username.' });
-        }
-        if (user.password != password) {
-          return done(null, false, { message: 'Incorrect password.' });
-        }
-        return done(null, user);
-      });
-    }
-  }
 ))
 
 passport.use(new GoogleStrategy({
-  clientID: "536960197406-hm9jsjrcuhrrmu2q9n9p23k0tg774e1s.apps.googleusercontent.com",
-  clientSecret: "9UNkD2MB9zSjHtAu0dWwZRn9",
-  callbackURL: "http://me.mydomain.com:3000/auth/google/callback"
+    clientID: "536960197406-hm9jsjrcuhrrmu2q9n9p23k0tg774e1s.apps.googleusercontent.com",
+    clientSecret: "9UNkD2MB9zSjHtAu0dWwZRn9",
+    callbackURL: "http://me.mydomain.com:3000/auth/google/callback"
 },
-  function (accessToken, refreshToken, profile, done) {
-    try {
-      let raw_object = profile._raw.toString()
-      raw_object = JSON.parse(raw_object)
-      mongoose.model("User").findOne({
-        email: raw_object.email,
-        oauth_unique_id: raw_object.sub
-      }).then(user => {
-        if (user) {
-          done(null, user)
-        }
-        else {
-          user = new mongoose.model("User")({
-            email: raw_object.email,
-            oauth_unique_id: raw_object.sub,
-            name: raw_object.name,
-            picture: raw_object.picture,
-            oauth_raw_object: raw_object,
-          }).save()
-            .then(user => {
-              done(null, user)
+    function (accessToken, refreshToken, profile, done) {
+        try {
+            let raw_object = profile._raw.toString()
+            raw_object = JSON.parse(raw_object)
+            mongoose.model("User").findOne({
+                email: raw_object.email,
+                oauth_unique_id: raw_object.sub
+            }).then(user => {
+                if (user) {
+                    done(null, user)
+                }
+                else {
+                    user = new mongoose.model("User")({
+                        email: raw_object.email,
+                        oauth_unique_id: raw_object.sub,
+                        name: raw_object.name,
+                        picture: raw_object.picture,
+                        oauth_raw_object: raw_object,
+                    }).save()
+                        .then(user => {
+                            done(null, user)
+                        })
+                        .catch(done)
+                }
             })
-            .catch(done)
+        } catch (error) {
+            done(error)
         }
-      })
-    } catch (error) {
-      done(error)
     }
-  }
 ));
 
 
 app.use(session({
-  secret: "cats", saveUninitialized: false, resave: false,
-  store: new MongoStore({
-    mongooseConnection: mongoose.connection
-  }),
-  cookie: {
-    httpOnly: true,
-    maxAge: 6000000
-  }
+    secret: "cats", saveUninitialized: false, resave: false,
+    store: new MongoStore({
+        mongooseConnection: mongoose.connection
+    }),
+    cookie: {
+        httpOnly: true,
+        maxAge: 6000000
+    }
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
@@ -166,49 +166,49 @@ app.use(passport.session());
 app.get('/auth/google', passport.authenticate('google', { scope: ['openid', 'profile', 'email'] }));
 
 app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function (req, res) {
-    res.redirect('/');
-  });
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    function (req, res) {
+        res.redirect('/');
+    });
 
 app.post('/login',
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  function (req, res) {
-    res.redirect('/')
-  }
+    passport.authenticate('local', { failureRedirect: '/login' }),
+    function (req, res) {
+        res.redirect('/')
+    }
 );
 
 app.post('/register',
-  function (req, res, next) {
-    mongoose.model("User").findOne({ username: req.body.username }, function (err, user) {
-      if (err || user) {
-        return res.redirect('/login')
-      }
-      else {
-        user = new mongoose.model("User")({
-          email: req.body.email,
-          name: req.body.name,
-          password: req.body.password,
-          username: req.body.username
-        }).save()
-          .then(user => {
-            req.isRegisteredNow = true
-            req.registerdUser = user
-            next()
-          })
-          .catch(
-            error => {
-              console.log("error", error);
-              res.redirect('/login')
+    function (req, res, next) {
+        mongoose.model("User").findOne({ username: req.body.username }, function (err, user) {
+            if (err || user) {
+                return res.redirect('/login')
             }
-          )
-      }
-    })
-  },
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  function (req, res) {
-    res.redirect('/')
-  }
+            else {
+                user = new mongoose.model("User")({
+                    email: req.body.email,
+                    name: req.body.name,
+                    password: req.body.password,
+                    username: req.body.username
+                }).save()
+                    .then(user => {
+                        req.isRegisteredNow = true
+                        req.registerdUser = user
+                        next()
+                    })
+                    .catch(
+                        error => {
+                            console.log("error", error);
+                            res.redirect('/login')
+                        }
+                    )
+            }
+        })
+    },
+    passport.authenticate('local', { failureRedirect: '/login' }),
+    function (req, res) {
+        res.redirect('/')
+    }
 );
 
 
@@ -247,29 +247,29 @@ app.post('/register',
 // }
 
 app.get("/login", function (req, res) {
-  // setTimeout(function () {
-  res.render('login', { login: true })
-  // req.redLock.unlock()
-  //   .catch(function (err) {
-  //     // we weren't able to reach redis; your lock will eventually
-  //     // expire, but you probably want to log this error
-  //     console.error(err);
-  //     // res.render('login', { template: 'login' , resourceLock: true})
-  //   });
-  // }, 1000)
+    // setTimeout(function () {
+    res.render('login', { login: true })
+    // req.redLock.unlock()
+    //   .catch(function (err) {
+    //     // we weren't able to reach redis; your lock will eventually
+    //     // expire, but you probably want to log this error
+    //     console.error(err);
+    //     // res.render('login', { template: 'login' , resourceLock: true})
+    //   });
+    // }, 1000)
 })
 
 app.get("/register", function (req, res) {
-  // setTimeout(function () {
-  res.render('login', { register: true })
-  // req.redLock.unlock()
-  //   .catch(function (err) {
-  //     // we weren't able to reach redis; your lock will eventually
-  //     // expire, but you probably want to log this error
-  //     console.error(err);
-  //     // res.render('login', { template: 'login' , resourceLock: true})
-  //   });
-  // }, 1000)
+    // setTimeout(function () {
+    res.render('login', { register: true })
+    // req.redLock.unlock()
+    //   .catch(function (err) {
+    //     // we weren't able to reach redis; your lock will eventually
+    //     // expire, but you probably want to log this error
+    //     console.error(err);
+    //     // res.render('login', { template: 'login' , resourceLock: true})
+    //   });
+    // }, 1000)
 })
 
 // app.post("/changepassword", function(req, res) {
@@ -278,240 +278,241 @@ app.get("/register", function (req, res) {
 // });
 
 app.use(function (req, res, next) {
-  if (req.user) {
-    user = mongoose.model("User").findOne({
-      _id: req.user._id,
-      // password: req.user.password
-    })
-      .then(user => {
-        if (user) {
-          req.session.user = user
-          req.user = user
-          next()
-        }
-        else {
-          req.logout()
-          req.session.destroy()
-          res.redirect("/login")
-        }
-      })
-  }
-  else {
-    res.redirect("/login")
-  }
+    if (req.user) {
+        user = mongoose.model("User").findOne({
+            _id: req.user._id,
+            // password: req.user.password
+        })
+            .then(user => {
+                if (user) {
+                    req.session.user = user
+                    req.user = user
+                    next()
+                }
+                else {
+                    req.logout()
+                    req.session.destroy()
+                    res.redirect("/login")
+                }
+            })
+    }
+    else {
+        res.redirect("/login")
+    }
 })
 
 app.get('/order/all', async function (req, res) {
-  allOrder = await knex('order').where({}).join('order_api_logs', 'order_api_logs.order_id', 'order.id')
-  res.render('dashboard',  {
-    order: true,
-    orderList: JSON.stringify(allOrder)
-  })
+    allOrder = await knex('order').where({}).join('order_api_logs', 'order_api_logs.order_id', 'order.id')
+    res.render('dashboard', {
+        order: true,
+        orderList: JSON.stringify(allOrder)
+    })
 })
 
 app.get("/", function (req, res) {
-  res.render('dashboard', {
-    user: req.user,
-    dashboard: true
-  })
+    res.render('dashboard', {
+        user: req.user,
+        dashboard: true
+    })
 })
 
 app.get('/logout', function (req, res) {
-  req.logout();
-  req.session.destroy()
-  res.redirect('/login');
+    req.logout();
+    req.session.destroy()
+    res.redirect('/login');
 });
 
 app.get('/order', async function (req, res) {
-  allOrder = await knex('order').where({}).join('order_api_logs', 'order_api_logs.order_id', 'order.id')
-  res.render('order', {
-    user: req.user,
-    order: true,
-    orderList: allOrder.map((e) => e.item_name + '~' + e.item_quantity + '~' + e.order_id)
-  })
+    allOrder = await knex('order').where({}).join('order_api_logs', 'order_api_logs.order_id', 'order.id')
+    res.render('order', {
+        user: req.user,
+        order: true,
+        orderList: allOrder.map((e) => e.item_name + '~' + e.item_quantity + '~' + e.order_id)
+    })
 })
 
 app.get('/order/redis', async function (req, res) {
-  const redisKey = 'all_orders_'+req.user._id.toString()
-  redisClient.LLEN(redisKey, function (error, response) {
-    console.log("redisClient.LLEN",redisKey, error, response, JSON.stringify(response))
-    if(response) {
-        const range = response -1
-        console.log(range, redisKey)
-        redisClient.LRANGE(redisKey, 0, range, function (error1, lrangeResponse) {
-          console.log("redisClient.LRANGE", error1, lrangeResponse, JSON.stringify(lrangeResponse))
-          res.render('order', {
-            user: req.user,
-            redisOrderList: lrangeResponse.map(e => {
-              parsedOrder = JSON.parse(e)
-              return parsedOrder.item_name + '~' + parsedOrder.item_quantity + '~' + parsedOrder.order_uuid
+    const redisKey = 'all_orders_' + req.user._id.toString()
+    redisClient.LLEN(redisKey, function (error, response) {
+        console.log("redisClient.LLEN", redisKey, error, response, JSON.stringify(response))
+        if (response) {
+            const range = response - 1
+            console.log(range, redisKey)
+            redisClient.LRANGE(redisKey, 0, range, function (error1, lrangeResponse) {
+                console.log("redisClient.LRANGE", error1, lrangeResponse, JSON.stringify(lrangeResponse))
+                res.render('order', {
+                    user: req.user,
+                    redisOrderList: lrangeResponse.map(e => {
+                        parsedOrder = JSON.parse(e)
+                        return parsedOrder.item_name + '~' + parsedOrder.item_quantity + '~' + parsedOrder.order_uuid
+                    })
+                })
             })
-          })  
-        })
-    }
-    else {
-        return res.render('order', {user: req.user})
-    }
-  })
+        }
+        else {
+            return res.render('order', { user: req.user })
+        }
+    })
 })
 
 app.post('/order', async function (req, res) {
-  if (req.body) {
-    try {
-      const [uuid_result] = await knex.raw("SELECT UUID() as uuid")
-      const uuid = uuid_result[0].uuid
-      const razorPayRequest = {
-        amount: 100, currency: "INR", receipt: uuid, payment_capture: true, notes: "p"
-      }
-      await knex.transaction(async trx => {
-        saved_order_response = await trx('order').insert({
-          user_uuid: req.user._id.toString(),
-          item_name: req.body.item,
-          item_quantity: req.body.itemQ,
-          created_at: new Date(),
-          updated_at: new Date(),
-          order_uuid: uuid
-        })
-        const razorpay_order = await razorPay.orders.create(razorPayRequest)
-        await trx('order_api_logs').insert({
-          order_id: saved_order_response[0],
-          response: JSON.stringify(razorpay_order),
-          request: JSON.stringify(razorPayRequest),
-          created_at: new Date(),
-          log_type: 'order'
-        })
-      })
-      res.redirect('/checkout?order_id=' + uuid)
-    } catch (error) {
-      console.error(error)
-      res.redirect('/order')
+    if (req.body) {
+        try {
+            const [uuid_result] = await knex.raw("SELECT UUID() as uuid")
+            const uuid = uuid_result[0].uuid
+            const razorPayRequest = {
+                amount: 100, currency: "INR", receipt: uuid, payment_capture: true, notes: "p"
+            }
+            await knex.transaction(async trx => {
+                saved_order_response = await trx('order').insert({
+                    user_uuid: req.user._id.toString(),
+                    item_name: req.body.item,
+                    item_quantity: req.body.itemQ,
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                    order_uuid: uuid
+                })
+                const razorpay_order = await razorPay.orders.create(razorPayRequest)
+                await trx('order_api_logs').insert({
+                    order_id: saved_order_response[0],
+                    response: JSON.stringify(razorpay_order),
+                    request: JSON.stringify(razorPayRequest),
+                    created_at: new Date(),
+                    log_type: 'order'
+                })
+            })
+            res.redirect('/checkout?order_id=' + uuid)
+        } catch (error) {
+            console.error(error)
+            res.redirect('/order')
+        }
     }
-  }
-  else {
-    req.redirect('/order')
-  }
+    else {
+        req.redirect('/order')
+    }
 })
 
 app.get('/checkout', async function (req, res) {
-  const orderId = req.query.order_id;
-  const [order] = await knex('order').where({ order_uuid: orderId }).join('order_api_logs', 'order_api_logs.order_id', 'order.id')
+    const orderId = req.query.order_id;
+    const [order] = await knex('order').where({ order_uuid: orderId }).join('order_api_logs', 'order_api_logs.order_id', 'order.id')
 
-  const rzResponse = JSON.parse(order.response);
+    const rzResponse = JSON.parse(order.response);
 
-  req.razorPay = {
-    dataKey: key_id,
-    dataAmount: 1000 * order.item_quantity,
-    dataOrderId: rzResponse.id,
-  }
-  res.render('checkout', {
-    user: req.user,
-    checkout: true,
-    razorPay: req.razorPay
-  })
+    req.razorPay = {
+        dataKey: key_id,
+        dataAmount: 1000 * order.item_quantity,
+        dataOrderId: rzResponse.id,
+    }
+    res.render('checkout', {
+        user: req.user,
+        checkout: true,
+        razorPay: req.razorPay
+    })
 })
 
 app.post('/payment/success', async function (req, res) {
-  const crypto = require('crypto');
-  // await knex('order_api_logs').whereRaw('response LIKE %?%', [req.body.razorpay_order_id])
-  // await knex('order_api_logs').insert({
-  //   order_id: saved_order_response[0],
-  //   response: JSON.stringify(razorpay_order),
-  //   request: JSON.stringify(razorPayRequest),
-  //   created_at: new Date(),
-  //   log_type: 'order'
-  // })
-  if (req.body.razorpay_signature) {
-    const hash = crypto.createHmac('sha256', key_secret)
-      .update(`${req.body.razorpay_order_id}|${req.body.razorpay_payment_id}`)
-      .digest('hex');
-    console.log(hash)
-    console.log(req.body)
-    if (hash == req.body.razorpay_signature) {
-      res.render('dashboard', {
-        user: req.user,
-        paymentSuccess: true,
-        order: true,
-      })
+    const crypto = require('crypto');
+    // await knex('order_api_logs').whereRaw('response LIKE %?%', [req.body.razorpay_order_id])
+    // await knex('order_api_logs').insert({
+    //   order_id: saved_order_response[0],
+    //   response: JSON.stringify(razorpay_order),
+    //   request: JSON.stringify(razorPayRequest),
+    //   created_at: new Date(),
+    //   log_type: 'order'
+    // })
+    if (req.body.razorpay_signature) {
+        const hash = crypto.createHmac('sha256', key_secret)
+            .update(`${req.body.razorpay_order_id}|${req.body.razorpay_payment_id}`)
+            .digest('hex');
+        console.log(hash)
+        console.log(req.body)
+        if (hash == req.body.razorpay_signature) {
+            res.render('dashboard', {
+                user: req.user,
+                paymentSuccess: true,
+                order: true,
+            })
+        }
+        else {
+            res.render('dashboard', {
+                user: req.user,
+                paymentFailure: true,
+                order: true
+            })
+        }
     }
     else {
-      res.render('dashboard', {
-        user: req.user,
-        paymentFailure: true,
-        order: true
-      })
+        res.render('dashboard', {
+            user: req.user,
+            paymentFailure: true,
+            order: true
+        })
     }
-  }
-  else {
-    res.render('dashboard', {
-      user: req.user,
-      paymentFailure: true,
-      order: true
-    })
-  }
 })
 var AWS = require('aws-sdk');
 // Set the region 
-AWS.config.update({region: 'us-east-1', accessKeyId:process.env.SES_KEY, secretAccessKey:process.env.SES_PASSWORD});
+AWS.config.update({ region: 'us-east-1', accessKeyId: process.env.SES_KEY, secretAccessKey: process.env.SES_PASSWORD });
 
 app.post("/sendemail", function (req, res) {
-// Give SES the details and let it construct the message for you.
-// Load the AWS SDK for Node.js
-// Create sendEmail params 
-var params = {
-  Destination: { /* required */
-    CcAddresses: [
-    //   'EMAIL_ADDRESS',
-      /* more items */
-    ],
-    ToAddresses: [
-      'tanmayawasekar@gmail.com',
-      /* more items */
-    ]
-  },
-  Message: { /* required */
-    Body: { /* required */
-    //   Html: {
-    //    Charset: "UTF-8",
-    //    Data: "HTML_FORMAT_BODY"
-    //   },
-      Text: {
-       Charset: "UTF-8",
-       Data: req.body.emailMessage
-      }
-     },
-     Subject: {
-      Charset: 'UTF-8',
-      Data: 'Test email'
-     }
-    },
-  Source: 'tanmayawasekar@gmail.com', /* required */
-  ReplyToAddresses: [
-     'tanmayawasekar@gmail.com',
-    /* more items */
-  ],
-};
+    console.log(process.env.SES_KEY, process.env.SES_PASSWORD, "<----------------")
+    // Give SES the details and let it construct the message for you.
+    // Load the AWS SDK for Node.js
+    // Create sendEmail params 
+    var params = {
+        Destination: { /* required */
+            CcAddresses: [
+                //   'EMAIL_ADDRESS',
+                /* more items */
+            ],
+            ToAddresses: [
+                'tanmayawasekar@gmail.com',
+                /* more items */
+            ]
+        },
+        Message: { /* required */
+            Body: { /* required */
+                //   Html: {
+                //    Charset: "UTF-8",
+                //    Data: "HTML_FORMAT_BODY"
+                //   },
+                Text: {
+                    Charset: "UTF-8",
+                    Data: req.body.emailMessage
+                }
+            },
+            Subject: {
+                Charset: 'UTF-8',
+                Data: 'Test email'
+            }
+        },
+        Source: 'tanmayawasekar@gmail.com', /* required */
+        ReplyToAddresses: [
+            'tanmayawasekar@gmail.com',
+            /* more items */
+        ],
+    };
 
-// Create the promise and SES service object
-var sendPromise = new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(params).promise();
+    // Create the promise and SES service object
+    var sendPromise = new AWS.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
 
-// Handle promise's fulfilled/rejected states
-sendPromise.then(
-  function(data) {
-    console.log(data.MessageId, data);
-    res.render('dashboard', {
-        user: req.user,
-        message: data.MessageId,
-        order: true
-      })
-  }).catch(
-    function(err) {
-    console.error(err, err.stack);
-    res.render('dashboard', {
-        user: req.user,
-        error: err,
-        order: true
-      })
-  });
+    // Handle promise's fulfilled/rejected states
+    sendPromise.then(
+        function (data) {
+            console.log(data.MessageId, data);
+            res.render('dashboard', {
+                user: req.user,
+                message: data.MessageId,
+                order: true
+            })
+        }).catch(
+            function (err) {
+                console.error(err, err.stack);
+                res.render('dashboard', {
+                    user: req.user,
+                    error: err,
+                    order: true
+                })
+            });
 })
 
 http.createServer(app).listen(3000)
