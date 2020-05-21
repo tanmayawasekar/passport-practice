@@ -28,7 +28,10 @@ def _docker_compose_up():
     import os
     SES_KEY = os.getenv('SES_KEY')
     SES_PASSWORD = os.environ.get('SES_PASSWORD')
-    run("sudo docker-compose up --build -d -e SES_KEY=%s,SES_PASSWORD=%s " % (SES_KEY, SES_PASSWORD))
+    
+    run("export SES_PASSWORD=%s"%SES_PASSWORD)
+    run("export SES_KEY=%s"%SES_KEY)
+    run("sudo docker-compose up --build -d")
     # run("sudo docker system prune -y")
     # https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis
     # run('sudo docker exec mysql sh -c "apt-get update -y"')
