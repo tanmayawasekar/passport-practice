@@ -2,6 +2,7 @@ import random
 from fabric.contrib.files import append, exists
 from fabric.api import cd, env, local, run, settings
 import re
+from fabric.context_managers import shell_env
 
 BRANCH_NAME = "master"
 REPO_URL = 'https://github.com/tanmayawasekar/passport-practice.git'  
@@ -24,7 +25,10 @@ def _docker_compose_up():
     run("mkdir -p ~/lib-redis")
     run("sudo chown -R 1001:1001 ~/db-redis")
     run("sudo chown -R 1001:1001 ~/lib-redis")
-    run("sudo docker-compose up --build -d")
+    import os
+    SES_KEY = os.getenv('SES_KEY')
+    SES_PASSWORD = os.environ.get('SES_PASSWORD')
+    run("sudo docker-compose up --build -d -e SES_KEY=%s,SES_PASSWORD=%s " % (SES_KEY, SES_PASSWORD))
     # run("sudo docker system prune -y")
     # https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis
     # run('sudo docker exec mysql sh -c "apt-get update -y"')
