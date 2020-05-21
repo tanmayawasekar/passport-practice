@@ -46,7 +46,7 @@ jobs:
             virtualenv venv
             source venv/bin/activate
             pip install -r requirements.txt
-            fab deploy:$CIRCLE_BRANCH -H $EC2_USERNAME@$EC2_PUBLIC_DNS --set SES_KEY=$SES_KEY --SES_PASSWORD=$SES_PASSWORD
+            fab deploy:$CIRCLE_BRANCH -H $EC2_USERNAME@$EC2_PUBLIC_DNS --set SES_KEY=$SES_KEY,SES_PASSWORD=$SES_PASSWORD
 
             # ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS \
             # echo "asd5"
