@@ -46,6 +46,8 @@ jobs:
             virtualenv venv
             source venv/bin/activate
             pip install -r requirements.txt
+            export SES_PASSWORD=$SES_PASSWORD
+            export SES_KEY=$SES_KEY
             fab deploy:$CIRCLE_BRANCH -H $EC2_USERNAME@$EC2_PUBLIC_DNS
 
             # ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS \
