@@ -451,7 +451,7 @@ app.post('/payment/success', async function (req, res) {
 })
 var AWS = require('aws-sdk');
 // Set the region 
-AWS.config.update({region: 'us-east-1', accessKeyId=process.env.SES_KEY, secretAccessKey:process.env.SES_PASSWORD});
+AWS.config.update({region: 'us-east-1', accessKeyId:process.env.SES_KEY, secretAccessKey:process.env.SES_PASSWORD});
 
 app.post("/sendemail", function (req, res) {
 // Give SES the details and let it construct the message for you.
