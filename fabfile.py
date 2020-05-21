@@ -31,7 +31,7 @@ def _docker_compose_up():
     
     run("export SES_PASSWORD=%s"%SES_PASSWORD)
     run("export SES_KEY=%s"%SES_KEY)
-    run("SES_KEY=%s SES_PASSWORD=%s sudo docker-compose up --build -d" % SES_KEY, SES_PASSWORD)
+    run("SES_KEY=%s SES_PASSWORD=%s sudo docker-compose up --build -d" % (SES_KEY, SES_PASSWORD))
     # run("sudo docker system prune -y")
     # https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis
     # run('sudo docker exec mysql sh -c "apt-get update -y"')
