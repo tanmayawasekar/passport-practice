@@ -35,13 +35,13 @@ def _docker_compose_up():
     run(b)
     with settings(warn_only=True):
         ses_data = {
-            "SES_KEY": SES_KEY,
-            "SES_PASSWORD": SES_PASSWORD
+            "SES_KEY": "\"" + SES_KEY + "\"",
+            "SES_PASSWORD": "\"" + SES_PASSWORD + "\""
         }
         run("rm sesKeys.js")
         run("touch sesKeys.js")
         # run("echo 'const ses_creds = {SES_KEY:%s, SES_PASSWORD:%s};' > sesKeys.js" % ("\""+SES_KEY+"\"", "\""+SES_PASSWORD+"\""))
-        run('echo "const ses_creds = " > sesKeys.js')
+        run('echo "const ses_creds = \\" > sesKeys.js')
         run('echo %s >> sesKeys.js' %json.dumps(ses_data))
         run('echo ; >> sesKeys.js')
         run('echo "module.exports = {ses_creds: ses_creds};" >> sesKeys.js')
