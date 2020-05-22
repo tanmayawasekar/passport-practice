@@ -35,8 +35,8 @@ def _docker_compose_up():
     run(b)
     with settings(warn_only=True):
         ses_data = {
-            "SES_KEY": '\"' + SES_KEY + '\"',
-            "SES_PASSWORD": '\"' + SES_PASSWORD + '\"'
+            "SES_KEY": '\"{}\"'.format(SES_KEY),
+            "SES_PASSWORD": '\"{}\"'.format(SES_PASSWORD),
         }
         run("rm sesKeys.js")
         run("touch sesKeys.js")
