@@ -517,4 +517,6 @@ app.post("/sendemail", function (req, res) {
             });
 })
 
-http.createServer(app).listen(3000)
+http.createServer(app).listen(3000, function () {
+    console.log("Starting app..")
+})
