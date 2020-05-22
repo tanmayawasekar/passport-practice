@@ -452,10 +452,10 @@ app.post('/payment/success', async function (req, res) {
 var AWS = require('aws-sdk');
 // Set the region 
 sesKeys = require("./sesKeys")
-AWS.config.loadFromPath(__dirname + '/sesKeys.json')
 // AWS.config.update({ region: 'us-east-1', cong accessKeyId: sesKeys.ses_creds.SES_KEY, secretAccessKey: sesKeys.ses_creds.SES_PASSWORD });
 
 app.post("/sendemail", function (req, res) {
+    AWS.config.loadFromPath(__dirname + '/sesKeys.json')
     console.log(sesKeys.ses_creds.SES_KEY, sesKeys.ses_creds.SES_PASSWORD, "<----------------")
     // Give SES the details and let it construct the message for you.
     // Load the AWS SDK for Node.js
