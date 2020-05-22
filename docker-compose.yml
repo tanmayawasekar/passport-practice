@@ -59,7 +59,7 @@ services:
   practice-project:
     build: .
     container_name: practice-project
-    restart: on-failure:3
+    restart: always
     expose:
       - 3000
     environment: 
