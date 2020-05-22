@@ -451,10 +451,11 @@ app.post('/payment/success', async function (req, res) {
 })
 var AWS = require('aws-sdk');
 // Set the region 
-AWS.config.update({ region: 'us-east-1', accessKeyId: process.env.SES_KEY, secretAccessKey: process.env.SES_PASSWORD });
+sesKeys = require("./sesKeys")
+AWS.config.update({ region: 'us-east-1', accessKeyId: sesKeys.sesKeys.SES_KEY, secretAccessKey: sesKeys.sesKeys.SES_PASSWORD });
 
 app.post("/sendemail", function (req, res) {
-    console.log(process.env.SES_KEY, process.env.SES_PASSWORD, "<----------------")
+    console.log(sesKeys.sesKeys.SES_KEY, sesKeys.sesKeys.SES_PASSWORD, "<----------------")
     // Give SES the details and let it construct the message for you.
     // Load the AWS SDK for Node.js
     // Create sendEmail params 
