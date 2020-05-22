@@ -39,9 +39,10 @@ def _docker_compose_up():
     # run("~/.bashrc >> " + a)
     # run("~/.bashrc >> " + b)
     # run("source ~/.bashrc")
-    run("rm  circle_ci_env.json")
-    run("touch  circle_ci_env.json")
-    run('echo {"SES_KEY":"%s", "SES_PASSWORD":"%s"} > circle_ci_env.json' % (SES_KEY, SES_PASSWORD))
+    with settings(warn_only=True):
+        run("rm  circle_ci_env.json")
+        run("touch  circle_ci_env.json")
+        run('echo {"SES_KEY":"%s", "SES_PASSWORD":"%s"} > circle_ci_env.json' % (SES_KEY, SES_PASSWORD))
     run("SES_KEY=%s SES_PASSWORD=%s sudo docker-compose up --build -d" % (SES_KEY, SES_PASSWORD))
     # run("sudo docker system prune -y")
     # https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis
