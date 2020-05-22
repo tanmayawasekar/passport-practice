@@ -13,6 +13,7 @@ COPY package*.json ./
 COPY . .
 
 # RUN npm install knex -g
+ENV SES_PASSWORD=${SES_PASSWORD}, SES_KEY=${SES_KEY}
 
 EXPOSE 3000
 CMD [ "npm", "start" ]
