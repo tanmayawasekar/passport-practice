@@ -28,9 +28,9 @@ def _docker_compose_up():
     import os
     SES_KEY = os.getenv('SES_KEY')
     SES_PASSWORD = os.environ.get('SES_PASSWORD')
-    run("echo %s", SES_PASSWORD)
-    run("echo %s", SES_KEY)
-    run("echo %s", SES_KEYS)
+    run("echo %s"% SES_PASSWORD)
+    run("echo %s"% SES_KEY)
+    run("echo %s"% SES_KEYS)
     
     run("export SES_PASSWORD=%s"%SES_PASSWORD)
     run("export SES_KEY=%s"%SES_KEY)
