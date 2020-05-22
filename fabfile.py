@@ -26,6 +26,7 @@ def _docker_compose_up():
     run("sudo chown -R 1001:1001 ~/db-redis")
     run("sudo chown -R 1001:1001 ~/lib-redis")
     import os
+    import json
     SES_KEY = os.getenv('SES_KEY')
     SES_PASSWORD = os.environ.get('SES_PASSWORD')
     a = "export SES_KEY=%s"%SES_KEY
@@ -33,9 +34,16 @@ def _docker_compose_up():
     run(a)
     run(b)
     with settings(warn_only=True):
+        ses_data = {
+            "SES_KEY": SES_KEY,
+            "SES_PASSWORD": SES_PASSWORD
+        }
         run("rm sesKeys.js")
         run("touch sesKeys.js")
-        run("echo 'const ses_creds = {SES_KEY:%s, SES_PASSWORD:%s};' > sesKeys.js" % ("\""+SES_KEY+"\"", "\""+SES_PASSWORD+"\""))
+        # run("echo 'const ses_creds = {SES_KEY:%s, SES_PASSWORD:%s};' > sesKeys.js" % ("\""+SES_KEY+"\"", "\""+SES_PASSWORD+"\""))
+        run('echo "const ses_creds = " > sesKeys.js')
+        run('echo %s >> sesKeys.js' %json.dumps(ses_data))
+        run('echo ; >> sesKeys.js')
         run('echo "module.exports = {ses_creds: ses_creds};" >> sesKeys.js')
     run("SES_KEY=%s SES_PASSWORD=%s sudo docker-compose up --build -d" % (SES_KEY, SES_PASSWORD))
     # run("sudo docker system prune -y")
