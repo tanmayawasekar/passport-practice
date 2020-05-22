@@ -66,8 +66,8 @@ services:
       - MONGODB_CONNECTION_STRING=mongodb://tanmay:7825tanmay@mongo:27017/passport-app
       - MY_SQL_HOST=mysql
       - REDIS_HOST=redis
-      - SES_PASSWORD
-      - SES_KEY
+      - AWS_SDK_LOAD_CONFIG=1
+
     external_links: 
       - mysql:3306
       - redis:6379
