@@ -35,7 +35,7 @@ def _docker_compose_up():
     with settings(warn_only=True):
         run("rm sesKeys.js")
         run("touch sesKeys.js")
-        run('echo "const ses_creds = {SES_KEY:\"%s\", SES_PASSWORD:\"%s\"};" > sesKeys.js' % ("\""+SES_KEY+"\"", "\""+SES_PASSWORD+"\""))
+        run("echo 'const ses_creds = {SES_KEY:%s, SES_PASSWORD:%s};' > sesKeys.js" % ("\""+SES_KEY+"\"", "\""+SES_PASSWORD+"\""))
         run('echo "module.exports = {ses_creds: ses_creds};" >> sesKeys.js')
     run("SES_KEY=%s SES_PASSWORD=%s sudo docker-compose up --build -d" % (SES_KEY, SES_PASSWORD))
     # run("sudo docker system prune -y")
