@@ -28,21 +28,14 @@ def _docker_compose_up():
     import os
     SES_KEY = os.getenv('SES_KEY')
     SES_PASSWORD = os.environ.get('SES_PASSWORD')
-    # run("echo %s"% SES_PASSWORD)
-    # run("echo %s"% SES_KEY)
-    # run("echo %s"% SES_KEYS)
     a = "export SES_KEY=%s"%SES_KEY
     b = "export SES_PASSWORD=%s"%SES_PASSWORD
-    
     run(a)
     run(b)
-    # run("~/.bashrc >> " + a)
-    # run("~/.bashrc >> " + b)
-    # run("source ~/.bashrc")
     with settings(warn_only=True):
         run("rm sesKeys.js")
         run("touch sesKeys.js")
-        run('echo "const ses_creds = {"SES_KEY":"%s", "SES_PASSWORD":"%s"};" > sesKeys.js' % (SES_KEY, SES_PASSWORD))
+        run('echo "const ses_creds = {"SES_KEY":\"%s\", "SES_PASSWORD":\"%s\"};" > sesKeys.js' % (SES_KEY, SES_PASSWORD))
         run('echo "module.exports = {ses_creds: ses_creds};" >> sesKeys.js')
     run("SES_KEY=%s SES_PASSWORD=%s sudo docker-compose up --build -d" % (SES_KEY, SES_PASSWORD))
     # run("sudo docker system prune -y")
