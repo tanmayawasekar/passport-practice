@@ -34,17 +34,18 @@ def _docker_compose_up():
     run(a)
     run(b)
     with settings(warn_only=True):
-        ses_data = {
-            "SES_KEY": "\"{}\"".format(SES_KEY),
-            "SES_PASSWORD": "\"{}\"".format(SES_PASSWORD),
-        }
-        run("rm sesKeys.js")
-        run("touch sesKeys.js")
+        # ses_data = {
+        #     "SES_KEY": "\"{}\"".format(SES_KEY),
+        #     "SES_PASSWORD": "\"{}\"".format(SES_PASSWORD),
+        # }
+        # run("rm sesKeys.js")
+        # run("touch sesKeys.js")
         # run("echo 'const ses_creds = {SES_KEY:%s, SES_PASSWORD:%s};' > sesKeys.js" % ("\""+SES_KEY+"\"", "\""+SES_PASSWORD+"\""))
-        run('echo "const ses_creds = %s" > sesKeys.js' % json.dumps(ses_data))
+        # run('echo "const ses_creds = %s" > sesKeys.js' % json.dumps(ses_data))
         # run('echo %s >> sesKeys.js' )
-        run('echo ;\n >> sesKeys.js')
-        run('echo "module.exports = {ses_creds: ses_creds};" >> sesKeys.js')
+        # run('echo ;\n >> sesKeys.js')
+        # run('echo "module.exports = {ses_creds: ses_creds};" >> sesKeys.js')
+        run('cp ../sesKeys.js ./sesKeys.js')
     run("SES_KEY=%s SES_PASSWORD=%s sudo docker-compose up --build -d" % (SES_KEY, SES_PASSWORD))
     # run("sudo docker system prune -y")
     # https://github.com/Ideonella-sakaiensis/lib_mysqludf_redis
