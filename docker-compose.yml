@@ -57,7 +57,7 @@ services:
       - 3306
 
   practice-project:
-    build: -e SES_PASSWORD .  
+    build: .  
     container_name: practice-project
     restart: always
     expose:
