@@ -463,22 +463,22 @@ app.post("/sendemail", function (req, res) {
     var params = {
         Destination: { /* required */
           ToAddresses: [
-            'tanmayawasekar@gmail.com'
+            req.body.sendTo
           ]
         },
         Message: { /* required */
           Body: { /* required */
-            Html: {
-              Data: 'STRING_VALUE', /* required */
-              Charset: 'UTF-8'
-            },
+            // Html: {
+            //   Data: 'STRING_VALUE', /* required */
+            //   Charset: 'UTF-8'
+            // },
             Text: {
-              Data: 'STRING_VALUE', /* required */
+              Data: req.body.emailMessage, /* required */
               Charset: 'UTF-8'
             }
           },
           Subject: { /* required */
-            Data: 'STRING_VALUE', /* required */
+            Data: req.body.subject, /* required */
             Charset: 'UTF-8'
           }
         },
