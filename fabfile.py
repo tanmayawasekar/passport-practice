@@ -14,7 +14,7 @@ def deploy(branch_name):
         _install_docker()
         _install_docker_compose()
         _get_latest_source(branch_name)
-        # _remove_existing_images_containers()
+        _remove_existing_images_containers()
         _docker_compose_up()
         # _docker_mysql_install()
         # _build_docker_image()
