@@ -495,7 +495,7 @@ app.post("/sendemail", function (req, res) {
     };
 
     // Create the promise and SES service object
-    var sendPromise = new AWS.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
+    var sendPromise = new AWS.SES().sendEmail(params).promise();
 
     // Handle promise's fulfilled/rejected states
     sendPromise.then(
