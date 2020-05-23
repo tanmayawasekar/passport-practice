@@ -71,15 +71,16 @@ def _install_docker_compose():
 
 
 def _remove_existing_images_containers():
-    output = run("sudo docker ps -q")
-    if output.stdout:
-        run("sudo docker kill "+" ".join(output.stdout.split("\r\n")))
-    output = run("sudo docker ps -a -q")
-    if(output.stdout):
-        run("sudo docker rm " + " ".join(output.stdout.split("\r\n")))
-    output = run("sudo docker images -q")
-    if(output.stdout):
-        run("sudo docker rmi "+" ".join(output.stdout.split("\r\n")))
+    with settings(warn_only=True):
+        output = run("sudo docker ps -q")
+        if output.stdout:
+            run("sudo docker kill "+" ".join(output.stdout.split("\r\n")))
+        output = run("sudo docker ps -a -q")
+        if(output.stdout):
+            run("sudo docker rm " + " ".join(output.stdout.split("\r\n")))
+        output = run("sudo docker images -q")
+        if(output.stdout):
+            run("sudo docker rmi "+" ".join(output.stdout.split("\r\n")))
 
 def _build_docker_image():
     run("sudo docker build -t tanmayawasekar/practice-project-display-ordering .")
