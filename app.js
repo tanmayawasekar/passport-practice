@@ -462,59 +462,73 @@ app.post("/sendemail", function (req, res) {
     // Create sendEmail params 
     var params = {
         Destination: { /* required */
-            CcAddresses: [
-                //   'EMAIL_ADDRESS',
-                /* more items */
-            ],
-            ToAddresses: [
-                'tanmayawasekar@gmail.com',
-                /* more items */
-            ]
+          ToAddresses: [
+            'tanmayawasekar@gmail.com'
+          ]
         },
         Message: { /* required */
-            Body: { /* required */
-                //   Html: {
-                //    Charset: "UTF-8",
-                //    Data: "HTML_FORMAT_BODY"
-                //   },
-                Text: {
-                    Charset: "UTF-8",
-                    Data: req.body.emailMessage
-                }
+          Body: { /* required */
+            Html: {
+              Data: 'STRING_VALUE', /* required */
+              Charset: 'UTF-8'
             },
-            Subject: {
-                Charset: 'UTF-8',
-                Data: 'Test email'
+            Text: {
+              Data: 'STRING_VALUE', /* required */
+              Charset: 'UTF-8'
             }
+          },
+          Subject: { /* required */
+            Data: 'STRING_VALUE', /* required */
+            Charset: 'UTF-8'
+          }
         },
         Source: 'tanmayawasekar@gmail.com', /* required */
+        ConfigurationSetName: 'STRING_VALUE',
         ReplyToAddresses: [
-            'tanmayawasekar@gmail.com',
-            /* more items */
+          'tanmayawasekar@gmail.com',
+          /* more items */
         ],
-    };
+        // ReturnPath: 'STRING_VALUE',
+      };
+      var ses = new AWS.SES({apiVersion: '2010-12-01'});
 
-    // Create the promise and SES service object
-    var sendPromise = new AWS.SES().sendEmail(params).promise();
-
-    // Handle promise's fulfilled/rejected states
-    sendPromise.then(
-        function (data) {
+      ses.sendEmail(params, function(err, data) {
+        if (err){
+            console.error(err, err.stack);
+            res.render('dashboard', {
+                user: req.user,
+                error: err,
+                order: true
+            })
+        }
+        else{
             console.log(data.MessageId, data);
             res.render('dashboard', {
                 user: req.user,
                 message: data.MessageId,
                 order: true
             })
-        }).catch(
-            function (err) {
-                console.error(err, err.stack);
-                res.render('dashboard', {
-                    user: req.user,
-                    error: err,
-                    order: true
-                })
-            });
+        }           // successful response
+      });
+
+    // Handle promise's fulfilled/rejected states
+    // sendPromise.then(
+    //     function (data) {
+    //         console.log(data.MessageId, data);
+    //         res.render('dashboard', {
+    //             user: req.user,
+    //             message: data.MessageId,
+    //             order: true
+    //         })
+    //     }).catch(
+    //         function (err) {
+    //             console.error(err, err.stack);
+    //             res.render('dashboard', {
+    //                 user: req.user,
+    //                 error: err,
+    //                 order: true
+    //             })
+    //         });
 })
 
 http.createServer(app).listen(3000, function () {
