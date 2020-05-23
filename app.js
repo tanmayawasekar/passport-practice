@@ -483,7 +483,6 @@ app.post("/sendemail", function (req, res) {
           }
         },
         Source: 'tanmayawasekar@gmail.com', /* required */
-        ConfigurationSetName: 'STRING_VALUE',
         ReplyToAddresses: [
           'tanmayawasekar@gmail.com',
           /* more items */
